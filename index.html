@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Interior Work Estimator</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 </head>
 <body class="bg-gradient-to-r from-[#eef2f3] to-[#8e9eab] font-sans text-gray-900 min-h-screen">
@@ -55,36 +58,38 @@
                   <label class="text-sm font-medium">Product</label>
                   <select id="product" required class="w-full border border-gray-300 rounded-lg px-4 py-2 mt-1">
                     <option value="">Select Product</option>
-                    <option>Loft</option>
-                    <option>Kitchen Kadapa Shelf</option>
-                    <option>Modular Kitchen</option>
-                    <option>Kitchen Wall Unit</option>
-                    <option>Crocker Unit</option>
-                    <option>Pooja Box</option>
-                    <option>TV Unit</option>
-                    <option>Panelling Work</option>
+                    <option value="LOFT">Loft</option>
+                    <option value="KITCHEN_KADAPA_SHELF">Kitchen Kadapa Shelf</option>
+                    <option value="MODULAR_KITCHEN">Modular Kitchen</option>
+                    <option value="KITCHEN_WALL_UNIT">Kitchen Wall Unit</option>
+                    <option value="CROCKERY_UNIT">Crockery Unit</option>
+                    <option value="POOJA_BOX">Pooja Box</option>
+                    <option value="TV_UNIT">TV Unit</option>
+                    <option value="PANELING_WORK">Panelling Work</option>
                   </select>
+                  
                 </div>
                 <div>
                   <label class="text-sm font-medium">Structure</label>
                   <select id="structure" required class="w-full border border-gray-300 rounded-lg px-4 py-2 mt-1">
                     <option value="">Select Structure</option>
-                    <option>MR- Commercial Plywood</option>
-                    <option>BWR- Plywood</option>
-                    <option>BWP- Plywood</option>
-                    <option>MDF Panel</option>
-                    <option>HMR Panel</option>
-                    <option>HDHMR Panel</option>
+                    <option>MR_COMMERCIAL_PLYWOOD</option>
+                    <option>BWR_PLYWOOD</option>
+                    <option>BWP_PLYWOOD</option>
+                    <option>MDF_PANEL</option>
+                    <option>HMR_PANEL</option>
+                    <option>HDHMR_PANEL</option>
                   </select>
                 </div>
                 <div>
                   <label class="text-sm font-medium">Finish</label>
                   <select id="finish" required class="w-full border border-gray-300 rounded-lg px-4 py-2 mt-1">
                     <option value="">Select Finish</option>
-                    <option>Prelam</option>
-                    <option>Laminate</option>
-                    <option>Acrylic</option>
+                    <option value="PRELAM">Prelam</option>
+                    <option value="LAMINATE">Laminate</option>
+                    <option value="ACRYLIC">Acrylic</option>
                   </select>
+                  
                 </div>
                 <div>
                   <label class="text-sm font-medium">Length (m)</label>
@@ -131,7 +136,7 @@
           <button onclick="toggleProductForm()" class="bg-[#3498db] hover:bg-[#2980b9] text-white px-4 py-2 rounded-lg shadow">
             <i class="fas fa-plus"></i> Add Product
           </button>
-          <button onclick="viewProducts()" class="bg-[#f39c12] hover:bg-[#e67e22] text-white px-4 py-2 rounded-lg shadow">
+          <button onclick="fetchProducts()" class="bg-[#f39c12] hover:bg-[#e67e22] text-white px-4 py-2 rounded-lg shadow">
             <i class="fas fa-eye"></i> View Products
           </button>
         </div>
@@ -140,8 +145,31 @@
       <!-- Product List -->
       <div id="productList" class="mt-8 hidden">
         <h3 class="text-xl font-bold mb-4 text-[#2c3e50]">Product List</h3>
-        <ul id="productItems" class="space-y-2 text-sm text-gray-700 list-disc list-inside"></ul>
+        <div class="overflow-auto rounded-lg shadow">
+          <table class="min-w-full bg-white text-sm text-left text-gray-600">
+            <thead class="bg-[#3498db] text-white uppercase text-xs">
+              <tr>
+                <th class="px-4 py-2">#</th>
+    <th class="px-4 py-2">Product</th>
+    <th class="px-4 py-2">Structure</th>
+    <th class="px-4 py-2">Finish</th>
+    <th class="px-4 py-2">Length</th>
+    <th class="px-4 py-2">Breadth</th>
+    <th class="px-4 py-2">Rate</th>
+    <th class="px-4 py-2">PDF</th>
+              </tr>
+            </thead>
+            <tbody id="productItems" class="divide-y divide-gray-200"></tbody>
+          </table>
+        </div>
+        <a id="pdfLink" href="#" target="_blank" class="mt-4 inline-block text-[#2980b9] underline font-medium hidden">
+          📄 Download Estimation PDF
+        </a>
       </div>
+      
+      <!-- Toast -->
+      <div id="toast" class="fixed bottom-5 right-5 bg-green-500 text-white text-sm px-4 py-2 rounded shadow-lg hidden z-50 transition-opacity duration-300"></div>
+      
     </main>
   </div>
 
@@ -151,47 +179,147 @@
     const productList = document.getElementById("productItems");
     const productListContainer = document.getElementById("productList");
     const productCard = document.getElementById("productDetailsCard");
-
+    const toast = document.getElementById("toast");
+    const pdfLink = document.getElementById("pdfLink");
+  
+    const clientInputs = {
+      name: document.querySelector('input[type="text"]'),
+      phoneNumber: document.querySelector('input[type="tel"]'),
+      date: document.querySelector('input[type="date"]'),
+    };
+  
     let products = [];
-
+  
     function toggleProductForm() {
       productCard.classList.toggle("hidden");
     }
+  
+    function showToast(message, color = "bg-green-500") {
+      toast.className = `fixed bottom-5 right-5 text-white text-sm px-4 py-2 rounded shadow-lg z-50 transition-opacity duration-300 ${color}`;
+      toast.textContent = message;
+      toast.classList.remove("hidden");
+      setTimeout(() => toast.classList.add("hidden"), 3000);
+    }
+  
+    async function fetchProducts() {
+  try {
+    const response = await fetch("http://localhost:3000/api/estimations");
+    if (!response.ok) throw new Error("Failed to fetch estimations");
 
-    function viewProducts() {
-      productList.innerHTML = "";
-      if (products.length === 0) {
-        productList.innerHTML = "<li>No products added yet.</li>";
-      } else {
-        products.forEach((p, index) => {
-          productList.innerHTML += `<li><strong>Product ${index + 1}:</strong> ${p.product}, ${p.structure}, ${p.finish}, ${p.length}m x ${p.breadth}m, ₹${p.rate}</li>`;
-        });
-      }
-      productListContainer.classList.remove("hidden");
+    const data = await response.json();
+    if (!Array.isArray(data)) throw new Error("Invalid data format");
+
+    productList.innerHTML = "";
+if (data.length === 0) {
+  productList.innerHTML = `<tr><td colspan="8" class="px-4 py-2 text-center text-gray-500">No estimations found.</td></tr>`;
+} else {
+  data.forEach((item, index) => {
+    productList.innerHTML += `
+      <tr>
+        <td class="px-4 py-2">${index + 1}</td>
+        <td class="px-4 py-2">${item.product}</td>
+        <td class="px-4 py-2">${item.structure}</td>
+        <td class="px-4 py-2">${item.finish}</td>
+        <td class="px-4 py-2">${item.length}</td>
+        <td class="px-4 py-2">${item.breadth}</td>
+        <td class="px-4 py-2">₹${item.rate}</td>
+        <td class="px-4 py-2 text-center">
+          <a href="http://localhost:3000/pdf/${item.id}" target="_blank" title="Download PDF">
+            📄
+          </a>
+        </td>
+      </tr>`;
+  });
+}
+
+
+    productListContainer.classList.remove("hidden");
+    showToast("Fetched estimations successfully!");
+  } catch (err) {
+    console.error(err);
+    showToast("Error fetching estimations", "bg-red-500");
+  }
+}
+
+  
+productForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const productData = {
+    product: productForm.product.value,
+    structure: productForm.structure.value,
+    finish: productForm.finish.value,
+    length: parseFloat(productForm.length.value),
+    breadth: parseFloat(productForm.breadth.value),
+    rate: parseFloat(productForm.rate.value),
+  };
+
+  const clientData = {
+    clientName: clientInputs.name.value,
+    phoneNumber: clientInputs.phoneNumber.value,
+    date: clientInputs.date.value,
+  };
+
+  const hasEmpty = Object.values({ ...productData, ...clientData }).some(v => !v);
+  if (hasEmpty) {
+    showToast("All fields must be filled before submitting!", "bg-red-500");
+    return;
+  }
+
+  const payload = { ...clientData, ...productData };
+
+  try {
+    const response = await fetch("http://localhost:3000/api/estimations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) throw new Error(result.error || "Failed to save estimation.");
+
+    products.push(payload);
+    productForm.reset();
+
+    // ✅ Reset client input fields
+    clientInputs.name.value = "";
+    clientInputs.phoneNumber.value = "";
+    clientInputs.date.value = "";
+
+    // ✅ Reset summary
+    updateSummary(0, 0, 0);
+
+    toggleProductForm();
+    showToast("Estimation saved successfully!");
+
+    // ✅ PDF link for latest entry
+    if (result.id) {
+      pdfLink.href = `http://localhost:3000/pdf/${result.id}`;
+      pdfLink.classList.remove("hidden");
+      showToast("PDF generated! Click to download.", "bg-blue-500");
     }
 
-    productForm?.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const values = {
-        product: productForm.product.value,
-        structure: productForm.structure.value,
-        finish: productForm.finish.value,
-        length: productForm.length.value,
-        breadth: productForm.breadth.value,
-        rate: productForm.rate.value,
-      };
+    // ✅ Refresh product list to show new entry with PDF link
+    fetchProducts();
 
-      const hasEmpty = Object.values(values).some(v => v === "");
-      if (hasEmpty) {
-        alert("All fields are required!");
-        return;
-      }
+  } catch (err) {
+    showToast(`Error: ${err.message}`, "bg-red-500");
+  }
+});
 
-      products.push(values);
-      productForm.reset();
-      productCard.classList.add("hidden");
-      alert("Product added successfully!");
-    });
+    function updateSummary(subtotal, transportation, total) {
+      document.getElementById("subtotal").textContent = `₹${subtotal.toFixed(2)}`;
+      document.getElementById("transportation").textContent = `₹${transportation.toFixed(2)}`;
+      document.getElementById("totalAmount").textContent = `₹${total.toFixed(2)}`;
+    }
+
+    
   </script>
+  
+  
+  
+  
+  
 </body>
 </html>
