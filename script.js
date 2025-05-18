@@ -23,7 +23,7 @@
   toast.className = `fixed top-5 right-5 text-white text-sm px-4 py-2 rounded shadow-lg z-50 transition-opacity duration-300 ${color}`;
   toast.textContent = message;
   toast.classList.remove("hidden");
-  setTimeout(() => toast.classList.add("hidden"), 2000);
+  setTimeout(() => toast.classList.add("hidden"), 20000);
 }
 
   
@@ -39,7 +39,7 @@
 if (data.length === 0) {
   productList.innerHTML = `<tr><td colspan="8" class="px-4 py-2 text-center text-gray-500">No estimations found.</td></tr>`;
 } else {
-  data.forEach((item, index) => {
+  data.reverse().forEach((item, index) => {
     productList.innerHTML += `
       <tr>
         <td class="px-4 py-2">${index + 1}</td>
@@ -130,11 +130,12 @@ updateSummary(result.subtotal, result.transportation, result.gst, result.amount)
     showToast("Estimation saved successfully!");
 
     // ✅ PDF link for latest entry
-    if (result.id) {
-      pdfLink.href = "http://localhost:3000/api/estimations/${item.id}/pdf";
-      pdfLink.classList.remove("hidden");
-      showToast("PDF generated! Click to download.", "bg-blue-500");
-    }
+    if (pdfLink) {
+  pdfLink.href = `http://localhost:3000/api/estimations/${result.id}/pdf`;
+  pdfLink.classList.remove("hidden");
+  showToast("PDF generated! Click to download.", "bg-blue-500");
+}
+
 
     // ✅ Refresh product list to show new entry with PDF link
     fetchProducts();
@@ -162,5 +163,8 @@ updateSummary(result.subtotal, result.transportation, result.gst, result.amount)
   }
 
   const dateInput = document.getElementById('dateInput');
+if (dateInput) {
   const today = new Date().toISOString().split('T')[0];
   dateInput.value = today;
+}
+

@@ -14,11 +14,11 @@
 
   <div class="flex items-center justify-center min-h-screen p-1 sm:p-6">
     <main class=" relative bg-white/60 backdrop-blur-lg shadow-xl w-full max-w-6xl p-4 sm:p-8 rounded-3xl transition-all duration-300">
-      <div class="absolute rounded-3xl top-0 left-0 -z-10 bg-gradient-to-r from-red-400 to-orange-300 w-full h-[350px] grid grid-cols-1"></div>
-      <div class="absolute rounded-tr-full  bottom-0 left-0 -z-10 bg-gradient-to-r from-red-400 to-orange-300/50 w-1/4 h-[100px] grid grid-cols-1"></div>
+      <!-- <div class="absolute rounded-3xl top-0 left-0 -z-10 bg-gradient-to-r from-red-400 to-blue-300 w-full h-[350px] grid grid-cols-1"></div> -->
+      <div class="absolute rounded-tr-full  bottom-0 left-0 -z-10 bg-gradient-to-r from-blue-400 to-blue-300/50 w-1/4 h-[100px] grid grid-cols-1"></div>
       <!-- Header -->
       <header class="flex justify-between items-center mb-10">
-        <h1 class="text-4xl font-extrabold text-orange-100 tracking-wide">Interior Work Estimator</h1>
+        <h1 class="text-4xl font-extrabold text-blue-500 tracking-wide">Interior Work Estimator</h1>
         <button class="text-[#3498db] flex items-center gap-2 text-lg font-semibold hover:underline">
           <!-- <i class="fas fa-chart-line"></i> Dashboard -->
         </button>
@@ -27,7 +27,7 @@
       <!-- Grid Layout -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Client Info -->
-        <div class="bg-orange-100/80 backdrop-blur-lg border-4 border-orange-300/20 p-4 sm:p-6 rounded-2xl shadow-md ">
+        <div class="bg-blue-100/80 backdrop-blur-lg border-4 border-blue-300/20 p-4 sm:p-6 rounded-2xl shadow-md ">
           <h2 class="text-xl font-bold text-red-500 mb-4">Client Information</h2>
           <form class="space-y-4">
         <div>
@@ -36,7 +36,7 @@
     type="text"
     id="clientName"
     required
-    class="w-full bg-white/60 focus:border-2 border-orange-300  outline-none rounded-lg px-4 py-2 mt-1 shadow-inner"
+    class="w-full bg-white/60 focus:border-2 border-blue-300  outline-none rounded-lg px-4 py-2 mt-1 shadow-inner"
     placeholder="Enter Your Name"
     oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
   />
@@ -65,7 +65,7 @@
     minlength="10"
     pattern="[0-9]{10}" 
     required 
-    class="w-full bg-white/60 focus:border-2 border-orange-300  outline-none rounded-lg px-4 py-2 mt-1 shadow-inner" 
+    class="w-full bg-white/60 focus:border-2 border-blue-300  outline-none rounded-lg px-4 py-2 mt-1 shadow-inner" 
     placeholder="Enter 10-digit number"
     title="Please enter exactly 10 digits"
   />
@@ -73,7 +73,7 @@
 </div>
             <div>
               <label class="text-sm font-medium">Date</label>
-              <input type="date" id="dateInput" required class="w-full bg-white/60 focus:border-2 border-orange-300  outline-none rounded-lg px-4 py-2 mt-1 shadow-inner" />
+              <input type="date" id="dateInput" required class="w-full bg-white/60 focus:border-2 border-blue-300  outline-none rounded-lg px-4 py-2 mt-1 shadow-inner" />
             </div>
           </form>
         </div>
@@ -81,8 +81,8 @@
   
 
         <!-- Summary -->
-        <div class="bg-orange-100/80 backdrop-blur-lg border-4 border-orange-300/20 p-4 sm:p-6 rounded-2xl shadow-md col-span-1 lg:col-span-1">
-          <h2 class="text-xl font-bold text-red-500 mb-4">In-Voice</h2>
+        <div class="bg-blue-100/80 backdrop-blur-lg border-4 border-blue-300/20 p-4 sm:p-6 rounded-2xl shadow-md col-span-1 lg:col-span-1">
+          <!-- <h2 class="text-xl font-bold text-red-500 mb-4">In-Voice</h2> -->
           <div class="w-full h-fit flex flex-col justify-evenly p-1 sm:p-6">
             <p class="text-lg">Subtotal:</p>
           <p class="text-lg font-bold text-[#2c3e50]" id="subtotal"></p>
@@ -112,15 +112,15 @@
   <i class="fas fa-plus"></i> Add Product
 </button>
 
-          <button onclick="fetchProducts()" class="bg-orange-400 hover:bg-orange-500 text-white px-4 py-2 rounded-lg shadow">
+          <button onclick="fetchProducts()" class="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow">
             <i class="fas fa-eye"></i> View Products
           </button>
         </div>
       </div>
 <!-- Product Form Card (In-Page Styled Like Modal) -->
-<div id="productFormCard" class="bg-orange-50  p-4 sm:p-8 rounded-2xl w-full  mt-8 shadow-2xl border-4 border-orange-200/50 hidden transition-all duration-300">
+<div id="productFormCard" class="bg-blue-50  p-4 sm:p-8 rounded-2xl w-full  mt-8 shadow-2xl border-4 border-blue-200/50 hidden transition-all duration-300">
   <div class="flex justify-between items-center mb-6">
-    <h2 class="text-2xl font-semibold text-red-400">Add Product</h2>
+    <h2 class="text-xl font-bold text-red-500">Add Product</h2>
     <button onclick="toggleProductForm()" class="text-red-500 hover:text-red-700">
       <i class="fas fa-times text-2xl"></i>
     </button>
@@ -130,7 +130,7 @@
     <div class="grid sm:grid-cols-2 gap-6">
       <div>
         <label class="text-sm font-semibold">Product</label>
-        <select id="product" required class="w-full  focus:border-2 border-orange-300  outline-none rounded-lg px-4 py-2 mt-1">
+        <select id="product" required class="w-full  focus:border-2 border-blue-300  outline-none rounded-lg px-4 py-2 mt-1">
           <option value="">Select Product</option>
           <option value="LOFT">Loft</option>
           <option value="KITCHEN_KADAPA_SHELF">Kitchen Kadapa Shelf</option>
@@ -144,7 +144,7 @@
       </div>
       <div>
         <label class="text-sm font-semibold">Structure</label>
-        <select id="structure" required class="w-full focus:border-2 border-orange-300  outline-none rounded-lg px-4 py-2 mt-1">
+        <select id="structure" required class="w-full focus:border-2 border-blue-300  outline-none rounded-lg px-4 py-2 mt-1">
           <option value="">Select Structure</option>
           <option>MR_COMMERCIAL_PLYWOOD</option>
           <option>BWR_PLYWOOD</option>
@@ -156,7 +156,7 @@
       </div>
       <div>
         <label class="text-sm font-semibold">Finish</label>
-        <select id="finish" required class="w-full focus:border-2 border-orange-300  outline-none rounded-lg px-4 py-2 mt-1">
+        <select id="finish" required class="w-full focus:border-2 border-blue-300  outline-none rounded-lg px-4 py-2 mt-1">
           <option value="">Select Finish</option>
           <option value="PRELAM">Prelam</option>
           <option value="LAMINATE">Laminate</option>
@@ -165,22 +165,22 @@
       </div>
       <div>
         <label class="text-sm font-semibold">Length (ft)</label>
-        <input type="number" id="length" required class="w-full focus:border-2 border-orange-300  outline-none rounded-lg px-4 py-2 mt-1" />
+        <input type="number" id="length" required class="w-full focus:border-2 border-blue-300  outline-none rounded-lg px-4 py-2 mt-1" />
       </div>
       <div>
         <label class="text-sm font-semibold">Breadth (ft)</label>
-        <input type="number" id="breadth" required class="w-full focus:border-2 border-orange-300  outline-none rounded-lg px-4 py-2 mt-1" />
+        <input type="number" id="breadth" required class="w-full focus:border-2 border-blue-300  outline-none rounded-lg px-4 py-2 mt-1" />
       </div>
       <div>
         <label class="text-sm font-semibold">Rate (₹/unit)</label>
-        <input type="number" id="rate" required class="w-full focus:border-2 border-orange-300  outline-none rounded-lg px-4 py-2 mt-1" />
+        <input type="number" id="rate" required class="w-full focus:border-2 border-blue-300  outline-none rounded-lg px-4 py-2 mt-1" />
       </div>
     </div>
 
     <div class="flex justify-end gap-4 pt-4">
       <button type="button" onclick="toggleProductForm()" class="bg-gray-300 hover:bg-gray-400 text-black py-2 px-6 rounded-lg">Cancel</button>
-      <button type="submit" class="bg-orange-400 hover:bg-orange-500 text-white py-2 px-6 rounded-lg shadow">
-        <i class="fas fa-save mr-2"></i> Submit
+      <button type="submit" class="bg-blue-400 hover:bg-blue-500 text-white py-2 px-6 rounded-lg shadow">
+        <i class="fas fa-save mr-2"></i>  Generate Estimate
       </button>
     </div>
   </form>
