@@ -4,7 +4,8 @@
     const productCard = document.getElementById("productDetailsCard");
     const toast = document.getElementById("toast");
     const pdfLink = document.getElementById("pdfLink");
-  
+    const generateEstimateBtn = document.getElementById("generateEstimateBtn");
+
     const clientInputs = {
       name: document.querySelector('input[type="text"]'),
       phoneNumber: document.querySelector('input[type="tel"]'),
@@ -23,7 +24,7 @@
   toast.className = `fixed top-5 right-5 text-white text-sm px-4 py-2 rounded shadow-lg z-50 transition-opacity duration-300 ${color}`;
   toast.textContent = message;
   toast.classList.remove("hidden");
-  setTimeout(() => toast.classList.add("hidden"), 20000);
+  setTimeout(() => toast.classList.add("hidden"), 10000);
 }
 
   
@@ -78,6 +79,7 @@ productForm?.addEventListener("submit", async (e) => {
     length: parseFloat(productForm.length.value),
     breadth: parseFloat(productForm.breadth.value),
     rate: parseFloat(productForm.rate.value),
+    customerNotes: productForm.customerNotes.value,
   };
 
   const clientData = {
@@ -104,41 +106,44 @@ const includeGST = true; // GST is always included by default
 };
 
 
-  try {
-    const response = await fetch("http://localhost:3000/api/estimations", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+ try {
+  const response = await fetch("http://localhost:3000/api/estimations", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
 
-    const result = await response.json();
+  const result = await response.json();
 
-    if (!response.ok) throw new Error(result.error || "Failed to save estimation.");
+  if (!response.ok) throw new Error(result.error || "Failed to save estimation.");
 
-    products.push(payload);
-    productForm.reset();
-updateSummary(result.subtotal, result.transportation, result.gst, result.amount);
-    // ✅ Reset client input fields
-    // clientInputs.name.value = "";
-    // clientInputs.phoneNumber.value = "";
-    // clientInputs.date.value = "";
+  products.push(payload);
+  productForm.reset();
+  updateSummary(result.subtotal, result.transportation, result.gst, result.amount);
 
-    // ✅ Reset summary
-    // updateSummary(0, 0, 0);
+  toggleProductForm();
+  showToast("Estimation saved successfully!");
 
-    toggleProductForm();
-    showToast("Estimation saved successfully!");
+  // PDF download after successful creation
+  const pdfUrl = `http://localhost:3000/api/estimations/${result.id}/pdf`;
 
-    // ✅ PDF link for latest entry
-    if (pdfLink) {
-  pdfLink.href = `http://localhost:3000/api/estimations/${result.id}/pdf`;
-  pdfLink.classList.remove("hidden");
-  showToast("PDF generated! Click to download.", "bg-blue-500");
-}
+  // Show visible link if needed
+  if (pdfLink) {
+    pdfLink.href = pdfUrl;
+    pdfLink.classList.remove("hidden");
+    showToast("PDF generated! Click to download.", "bg-blue-500");
+  }
 
+  // Automatically trigger PDF download
+  const a = document.createElement('a');
+  a.href = pdfUrl;
+  a.download = `Estimation-${result.id}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 
-    // ✅ Refresh product list to show new entry with PDF link
-    fetchProducts();
+  // Refresh product list
+  fetchProducts();
 
   } catch (err) {
     showToast(`Error: ${err.message}`, "bg-red-500");
