@@ -3,238 +3,252 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Interior Work Estimator</title>
+  <title>Creative Design Studios</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- SweetAlert2 CDN -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <link rel="icon" type="image/x-icon" href="/assets/logo.png">
 </head>
-<body class="bg-white font-sans text-gray-900 min-h-screen" style="font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";">
-
-  <div class="flex items-center justify-center min-h-screen p-1 sm:p-6">
-    <main class=" relative bg-white/60 backdrop-blur-lg shadow-xl w-full max-w-6xl p-4 sm:p-8 rounded-3xl transition-all duration-300">
-      <!-- <div class="absolute rounded-3xl top-0 left-0 -z-10 bg-gradient-to-r from-red-400 to-blue-300 w-full h-[350px] grid grid-cols-1"></div> -->
-      <div class="absolute rounded-tr-full  bottom-0 left-0 -z-10 bg-gradient-to-r from-blue-400 to-blue-300/50 w-1/4 h-[100px] grid grid-cols-1"></div>
+<body class="bg-white font-sans text-gray-900 min-h-screen">
+  <div class="flex items-start justify-center min-h-screen p-4 sm:p-8">
+    <main class="relative bg-white/60 backdrop-blur-lg shadow-xl w-full max-w-7xl p-6 sm:p-10 rounded-3xl">
+      <div class="absolute rounded-tr-full bottom-0 left-0 -z-10 bg-gradient-to-r from-blue-400 to-blue-300/50 w-1/4 h-[100px]"></div>
+      
       <!-- Header -->
       <header class="flex justify-between items-center mb-10">
         <h1 class="text-4xl font-extrabold text-gray-800 tracking-wide">Interior Work Estimator</h1>
-        <button class="text-[#3498db] flex items-center gap-2 text-lg font-semibold hover:underline">
-          <!-- <i class="fas fa-chart-line"></i> Dashboard -->
-        </button>
       </header>
 
-      <!-- Grid Layout -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Main Grid: Client Info Left + Add Product Right -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Client Info -->
-        <div class="bg-blue-100/80 backdrop-blur-lg border-4 border-blue-300/20 p-4 sm:p-6 rounded-2xl shadow-md ">
+        <div class="bg-blue-100/80 backdrop-blur-lg border-4 border-blue-300/20 p-6 rounded-2xl shadow-md">
           <h2 class="text-xl font-bold text-gray-800 mb-4">Client Information</h2>
           <form class="space-y-4">
-        <div>
-  <label class="text-sm font-medium" for="clientName">Client Name</label>
-  <input
-    type="text"
-    id="clientName"
-    required
-    class="w-full bg-white/60 focus:border-2 border-blue-300  outline-none rounded-lg px-4 py-2 mt-1 shadow-inner"
-    placeholder="Enter Your Name"
-    oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')"
-  />
-</div>
-
-           <!-- <div>
-  <label class="text-sm font-medium">Phone Number</label>
-  <input 
-    type="tel" 
-    maxlength="10" 
-    minlength="10"
-    pattern="[0-9]{10}" 
-    required 
-    class="w-full bg-white/60 border border-gray-300 rounded-lg px-4 py-2 mt-1 shadow-inner" 
-    placeholder="Enter 10-digit number"
-    title="Please enter exactly 10 digits"
-  />
-</div> -->
-
-<div>
-  <label class="text-sm font-medium" for="phoneNumber">Phone Number</label>
-  <input 
-    type="tel" 
-    id="phoneNumber"
-    maxlength="10" 
-    minlength="10"
-    pattern="[0-9]{10}" 
-    required 
-    class="w-full bg-white/60 focus:border-2 border-blue-300  outline-none rounded-lg px-4 py-2 mt-1 shadow-inner" 
-    placeholder="Enter 10-digit number"
-    title="Please enter exactly 10 digits"
-  />
-  <span id="phoneError" class="text-red-600 text-sm mt-1 hidden">Please enter correct mobile number</span>
-</div>
             <div>
-              <label class="text-sm font-medium">Date</label>
-              <input type="date" id="dateInput" required class="w-full bg-white/60 focus:border-2 border-blue-300  outline-none rounded-lg px-4 py-2 mt-1 shadow-inner" />
+              <label class="text-sm font-medium" for="clientName">Client Name</label>
+              <input type="text" id="clientName" required class="w-full bg-white/60 focus:border-2 border-blue-300 outline-none rounded-lg px-4 py-2 mt-1 shadow-inner" placeholder="Enter Your Name" oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')" />
             </div>
             <div>
-</div>
-
+              <label class="text-sm font-medium" for="phoneNumber">Phone Number</label>
+              <input type="tel" id="phoneNumber" maxlength="10" minlength="10" pattern="[0-9]{10}" required class="w-full bg-white/60 focus:border-2 border-blue-300 outline-none rounded-lg px-4 py-2 mt-1 shadow-inner" placeholder="Enter 10-digit number" title="Please enter exactly 10 digits" />
+              <span id="phoneError" class="text-red-600 text-sm mt-1 hidden">Please enter correct mobile number</span>
+            </div>
+            <div>
+              <label class="text-sm font-medium" for="dateInput">Date</label>
+              <input type="date" id="dateInput" required class="w-full bg-white/60 focus:border-2 border-blue-300 outline-none rounded-lg px-4 py-2 mt-1 shadow-inner" />
+            </div>
           </form>
-        </div>
-
-  
-
-        <!-- Summary -->
-        <div class="bg-blue-100/80 backdrop-blur-lg border-4 border-blue-300/20 p-4 sm:p-6 rounded-2xl shadow-md col-span-1 lg:col-span-1">
-          <h2 class="text-xl font-bold text-gray-800 mb-4">Summary</h2>
-          <div class="w-full h-fit flex flex-col justify-evenly p-1 sm:p-6">
-            <p class="text-lg">Subtotal:</p>
-          <p class="text-lg font-bold text-[#2c3e50]" id="subtotal"></p>
-          <p class="text-lg mt-4">Transportation Charges (8%):</p>
-          <p class="text-lg font-bold text-[#2c3e50]" id="transportation"></p>
-          <p class="text-lg mt-4">GST Charges (10%):</p>
-          <p class="text-lg font-bold text-[#2c3e50]" id="GST"></p>
-          <p class="text-lg mt-4">Total:</p>
-          <p class="text-xl font-extrabold text-[#2c3e50]" id="totalAmount"></p>
+          <!-- Total Amount -->
+          <div class="mt-6 pt-4 border-t border-blue-300">
+            <p class="text-lg font-semibold text-gray-800">Total Amount:</p>
+            <p class="text-xl font-extrabold text-[#2c3e50]" id="totalAmount">₹0</p>
           </div>
         </div>
-      </div>
 
-      <!-- Footer Actions -->
-      <div class="mt-10 flex flex-col sm:flex-row justify-between items-center gap-4">
-        <label class="flex items-center space-x-2 text-sm">
-          <input type="checkbox" id="includeTransportation" class="accent-[#3498db] rounded" />
-          <span class="font-semibold">Include Transportation (8%)</span>
-        </label>
-        <label class="flex items-center space-x-2 text-sm">
-  <!-- <input id="includeGST" class="accent-[#3498db] rounded" /> -->
-  <span id="includeGST" class="font-semibold">* Include GST (10%)</span>
-</label>
+        <!-- Add Product Form -->
+        <div class="bg-blue-50 p-6 rounded-2xl shadow-xl border-4 border-blue-200/50">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">Add Product</h2>
+          </div>
 
-        <div class="flex gap-4">
-          <button onclick="toggleProductForm()" class="bg-green-600 hover:bg-green-500 text-white font-bold px-4 py-2 rounded-lg shadow">
-  <i class="fas fa-plus"></i> Add Product
-</button>
+          <form id="productForm" class="space-y-6">
+            <div class="grid md:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Product</label>
+                <select id="product" required class="w-full border border-gray-300 focus:border-blue-500 rounded-lg px-4 py-2">
+                  <option value="">Select Product</option>
+                  <option value="LOFT">Loft</option>
+                  <option value="KITCHEN_KADAPA_SHELF">Kitchen Kadapa Shelf</option>
+                  <option value="MODULAR_KITCHEN">Modular Kitchen</option>
+                  <option value="KITCHEN_WALL_UNIT">Kitchen Wall Unit</option>
+                  <option value="CROCKERY_UNIT">Crockery Unit</option>
+                  <option value="POOJA_BOX">Pooja Box</option>
+                  <option value="TV_UNIT">TV Unit</option>
+                  <option value="PANELING_WORK">Panelling Work</option>
+                </select>
+              </div>
 
-          <button onclick="fetchProducts()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-lg shadow">
-            <i class="fas fa-eye"></i> View Products
-          </button>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Structure</label>
+                <select id="structure" required class="w-full border border-gray-300 focus:border-blue-500 rounded-lg px-4 py-2">
+                  <option value="">Select Structure</option>
+                  <option value="MR_COMMERCIAL_PLYWOOD">MR Commercial Plywood</option>
+                  <option value="BWR_PLYWOOD">BWR Plywood</option>
+                  <option value="BWP_PLYWOOD">BWP Plywood</option>
+                  <option value="MDF_PANEL">MDF Panel</option>
+                  <option value="HMR_PANEL">HMR Panel</option>
+                  <option value="HDHMR_PANEL">HD HMR Panel</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Finish</label>
+                <select id="finish" required class="w-full border border-gray-300 focus:border-blue-500 rounded-lg px-4 py-2">
+                  <option value="">Select Finish</option>
+                  <option value="PRELAM">Prelam</option>
+                  <option value="LAMINATE">Laminate</option>
+                  <option value="ACRYLIC">Acrylic</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Dimensions -->
+            <div class="grid md:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Length (ft)</label>
+                <input type="number" id="length" required class="w-full border border-gray-300 focus:border-blue-500 rounded-lg px-4 py-2" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Breadth (ft)</label>
+                <input type="number" id="breadth" required class="w-full border border-gray-300 focus:border-blue-500 rounded-lg px-4 py-2" />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Rate (₹/unit)</label>
+                <input type="number" id="rate" required class="w-full border border-gray-300 focus:border-blue-500 rounded-lg px-4 py-2" />
+              </div>
+            </div>
+
+            <!-- Notes -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Customer Notes</label>
+              <textarea id="customerNotes" rows="3" placeholder="Any special instructions..." class="w-full border border-gray-300 focus:border-blue-500 rounded-lg px-4 py-2 resize-none"></textarea>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-end gap-4">
+              <button type="reset" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-6 rounded-lg">Cancel</button>
+              <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow" id="generateEstimateBtn">
+                <i class="fas fa-save mr-2"></i> Generate Estimate
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-<!-- Product Form Card (In-Page Styled Like Modal) -->
-<div id="productFormCard" class="bg-blue-50  p-4 sm:p-8 rounded-2xl w-full  mt-8 shadow-2xl border-4 border-blue-200/50 hidden transition-all duration-300">
-  <div class="flex justify-between items-center mb-6">
-    <h2 class="text-xl font-bold text-gray-800">Add Product</h2>
-    <button onclick="toggleProductForm()" class="text-gray-500 hover:text-red-700">
-      <i class="fas fa-times text-2xl"></i>
-    </button>
-  </div>
-
- <form id="productForm" class="space-y-8 p-8 rounded-xl  max-w-4xl mx-auto">
-  <!-- Top Row: Product, Structure, Finish -->
-  <div class="grid md:grid-cols-3 gap-6">
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Product</label>
-      <select id="product" required class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-300 rounded-lg px-4 py-2 outline-none">
-        <option value="">Select Product</option>
-        <option value="LOFT">Loft</option>
-        <option value="KITCHEN_KADAPA_SHELF">Kitchen Kadapa Shelf</option>
-        <option value="MODULAR_KITCHEN">Modular Kitchen</option>
-        <option value="KITCHEN_WALL_UNIT">Kitchen Wall Unit</option>
-        <option value="CROCKERY_UNIT">Crockery Unit</option>
-        <option value="POOJA_BOX">Pooja Box</option>
-        <option value="TV_UNIT">TV Unit</option>
-        <option value="PANELING_WORK">Panelling Work</option>
-      </select>
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Structure</label>
-      <select id="structure" required class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-300 rounded-lg px-4 py-2 outline-none">
-        <option value="">Select Structure</option>
-        <option>MR_COMMERCIAL_PLYWOOD</option>
-        <option>BWR_PLYWOOD</option>
-        <option>BWP_PLYWOOD</option>
-        <option>MDF_PANEL</option>
-        <option>HMR_PANEL</option>
-        <option>HDHMR_PANEL</option>
-      </select>
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Finish</label>
-      <select id="finish" required class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-300 rounded-lg px-4 py-2 outline-none">
-        <option value="">Select Finish</option>
-        <option value="PRELAM">Prelam</option>
-        <option value="LAMINATE">Laminate</option>
-        <option value="ACRYLIC">Acrylic</option>
-      </select>
-    </div>
-  </div>
-
-  <!-- Dimensions & Rate -->
-  <div class="grid md:grid-cols-3 gap-6">
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Length (ft)</label>
-      <input type="number" id="length" required class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-300 rounded-lg px-4 py-2 outline-none" />
-    </div>
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Breadth (ft)</label>
-      <input type="number" id="breadth" required class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-300 rounded-lg px-4 py-2 outline-none" />
-    </div>
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Rate (₹/unit)</label>
-      <input type="number" id="rate" required class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-300 rounded-lg px-4 py-2 outline-none" />
-    </div>
-  </div>
-
-  <!-- Notes -->
-  <div>
-    <label class="block text-sm font-medium text-gray-700 mb-1">Customer Notes</label>
-    <textarea id="customerNotes" rows="4" placeholder="Any special instructions..." class="w-full border border-gray-300 focus:border-blue-500 focus:ring-blue-300 rounded-lg px-4 py-2 outline-none resize-none"></textarea>
-  </div>
-
-  <!-- Action Buttons -->
-  <div class="flex justify-end gap-4 pt-4">
-    <button type="button" onclick="toggleProductForm()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-6 rounded-lg">
-      Cancel
-    </button>
-    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow">
-      <i class="fas fa-save mr-2"></i> Generate Estimate
-    </button>
-  </div>
-</form>
-
-</div>
-      <!-- Product List -->
-      <div id="productList" class="mt-8 hidden">
-        <h3 class="text-xl font-bold mb-4 text-[#2c3e50]">Product List</h3>
-        <div class="overflow-auto rounded-lg shadow">
-          <table class="min-w-full bg-white text-sm text-left text-gray-600">
-            <thead class="bg-[#3498db] text-white uppercase text-xs">
-              <tr>
-                <th class="px-4 py-2">#</th>
-    <th class="px-4 py-2">Client Name</th>
-    <th class="px-4 py-2">Phone Number</th>
-    <th class="px-4 py-2">Product</th>
-    <th class="px-4 py-2">Structure</th>
-    <th class="px-4 py-2">Finish</th>
-    <th class="px-4 py-2">Total Amount</th>
-    <th class="px-4 py-2">PDF</th>
-              </tr>
-            </thead>
-            <tbody id="productItems" class="divide-y divide-gray-200"></tbody>
-          </table>
+      
+      <!-- Estimation View Card -->
+      <div id="estimationViewCard" class="mt-10 hidden bg-white border border-blue-200 p-6 rounded-xl shadow-md">
+        <h3 class="text-lg font-bold mb-4 text-blue-700">Latest Estimation Details</h3>
+        <div id="estimationDetails" class="space-y-2 text-gray-800 text-sm">
+          <!-- Populated dynamically if needed -->
         </div>
-        <!-- <a id="pdfLink" href="#" target="_blank" class="mt-4 inline-block text-[#2980b9] underline font-medium hidden">
-          📄 Download Estimation PDF
-        </a> -->
       </div>
-      
-      <!-- Toast -->
-      <div id="toast" class="fixed bottom-5 right-5 bg-green-500 text-white text-sm px-4 py-2 rounded shadow-lg hidden z-50 transition-opacity duration-300"></div>
-      
+
+      <!-- Hidden PDF Link (if needed) -->
+      <a id="pdfLink" class="hidden" download></a>
+
     </main>
   </div>
-<script src="script.js"></script>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="hidden"></div>
+
+  <script>
+    const productForm = document.getElementById("productForm");
+    const pdfLink = document.getElementById("pdfLink");
+    const generateEstimateBtn = document.getElementById("generateEstimateBtn");
+
+    const clientInputs = {
+      name: document.getElementById("clientName"),
+      phoneNumber: document.getElementById("phoneNumber"),
+      date: document.getElementById("dateInput")
+    };
+
+    let products = [];
+
+    function showToast(message, color = "bg-green-500") {
+      const toast = document.getElementById("toast");
+      toast.className = `fixed top-5 right-5 text-white text-sm px-4 py-2 rounded shadow-lg z-50 transition-opacity duration-300 ${color}`;
+      toast.textContent = message;
+      toast.classList.remove("hidden");
+      setTimeout(() => toast.classList.add("hidden"), 3000);
+    }
+
+    async function fetchProducts() {
+      try {
+        const response = await fetch("http://localhost:3000/api/estimations");
+        if (!response.ok) throw new Error("Failed to fetch estimations");
+
+        const data = await response.json();
+        // You can update a list or table here if needed.
+        showToast("Fetched estimations successfully!");
+      } catch (err) {
+        console.error(err);
+        showToast("Error fetching estimations", "bg-red-500");
+      }
+    }
+
+    productForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const productData = {
+        product: document.getElementById("product").value,
+        structure: document.getElementById("structure").value,
+        finish: document.getElementById("finish").value,
+        length: parseFloat(document.getElementById("length").value),
+        breadth: parseFloat(document.getElementById("breadth").value),
+        rate: parseFloat(document.getElementById("rate").value),
+        customerNotes: document.getElementById("customerNotes").value
+      };
+
+      const clientData = {
+        clientName: clientInputs.name.value,
+        phoneNumber: clientInputs.phoneNumber.value,
+        date: clientInputs.date.value
+      };
+
+      const hasEmpty = Object.values({ ...productData, ...clientData }).some(v => !v);
+      if (hasEmpty) {
+        showToast("All fields must be filled before submitting!", "bg-red-500");
+        return;
+      }
+
+      const payload = { ...clientData, ...productData };
+
+      try {
+        const response = await fetch("http://localhost:3000/api/estimations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Failed to save estimation.");
+
+        products.push(payload);
+        // productForm.reset();
+        updateSummary(result.amount);
+        showToast("Estimation saved successfully!");
+
+        // Automatically download the PDF
+        const pdfUrl = `http://localhost:3000/api/estimations/${result.id}/pdf`;
+        const tempLink = document.createElement("a");
+        tempLink.href = pdfUrl;
+        tempLink.download = `Estimation-${result.id}.pdf`;
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+
+        fetchProducts(); // Optionally refresh the estimations list
+
+      } catch (err) {
+        showToast(`Error: ${err.message}`, "bg-red-500");
+      }
+    });
+
+    function updateSummary(total) {
+      document.getElementById("totalAmount").textContent = `₹${parseFloat(total).toFixed(2)}`;
+    }
+
+    // Set today's date automatically in the date input field
+    const dateInput = document.getElementById("dateInput");
+    if (dateInput) {
+      const today = new Date().toISOString().split("T")[0];
+      dateInput.value = today;
+    }
+
+    // Initial fetch of estimations (if needed)
+    fetchProducts();
+  </script>
 </body>
 </html>
