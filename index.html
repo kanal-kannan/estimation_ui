@@ -6,123 +6,151 @@
   <title>Interior Work Estimator</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
-
   <style>
-  .product-row {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 0.8fr 0.8fr 0.8fr 0.8fr auto;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  @media (max-width: 768px) {
     .product-row {
+      display: grid;
       grid-template-columns: 1fr;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.375rem;
+      margin-bottom: 0.75rem;
     }
 
-    .product-row > * {
-      grid-column: 1 / -1;
+    @media (min-width: 768px) {
+      .product-row {
+        grid-template-columns: 1.5fr 1fr 1fr 0.8fr 0.8fr 0.8fr 0.8fr auto;
+        align-items: center;
+        gap: 0.75rem;
+      }
     }
-  }
 
-  input, select {
-    width: 100%;
-  }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+    }
 
-  .hidden {
-  display: none !important;
-}
+    .hidden {
+      display: none !important;
+    }
 
-</style>
-
-
+    .client-info-grid {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    
+    @media (min-width: 640px) {
+      .client-info-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
 </head>
 
-<body class="bg-gray-50 min-h-screen p-4 md:p-8">
-  <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+<body class="bg-gray-50 min-h-screen p-2 sm:p-4 md:p-6">
+  <!-- Custom Product Modal -->
+  <div id="customProductModal" class="fixed inset-0 bg-black bg-opacity-30 hidden z-50 justify-center items-center">
+    <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
+      <h2 class="text-lg font-bold mb-4">Add Custom Product</h2>
+      <input id="customProductName" type="text" placeholder="Product Name" class="w-full mb-3 p-2 border rounded">
+      <select id="customStructure" class="w-full mb-3 p-2 border rounded"></select>
+      <select id="customFinish" class="w-full mb-3 p-2 border rounded"></select>
+      <input id="customRate" type="number" placeholder="Rate" class="w-full mb-3 p-2 border rounded" min="0">
+      <div class="flex justify-end gap-2">
+        <button onclick="closeCustomProductModal()" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+        <button onclick="saveCustomProduct()" class="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
     <!-- Header -->
-    <div class="bg-blue-600 text-white p-6">
+    <div class="bg-blue-600 text-white p-4 sm:p-6">
       <div class="flex justify-between items-center">
-        <h1 class="text-2xl md:text-3xl font-bold">Interior Work Estimator</h1>
-        <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <h1 class="text-xl sm:text-2xl md:text-3xl font-bold">Interior Work Estimator</h1>
+        <svg class="w-6 h-6 sm:w-8 sm:h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
         </svg>
       </div>
     </div>
 
-    <div class="p-6">
+    <div class="p-3 sm:p-4 md:p-6">
       <!-- Client Information -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div class="client-info-grid grid mb-4 sm:mb-6 md:mb-8">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Client Name</label>
-          <input type="text" placeholder="Enter Your Name"  class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+          <input type="text" id="clientName" placeholder="Enter Your Name" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base">
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-          <input type="tel"  maxlength="10" 
-          minlength="10"
-          pattern="[0-9]{10}" 
-          required  
-          placeholder="Enter 10-digit number"
-          title="Please enter exactly 10 digits"
-
-class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+          <input type="tel" id="clientPhone" maxlength="10" minlength="10" pattern="[0-9]{10}" required placeholder="Enter 10-digit number" title="Please enter exactly 10 digits"
+            class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base">
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
-          <input type="date"id="dateInput" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+          <input type="date" id="dateInput" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base">
         </div>
       </div>
 
       <!-- Products Table Header -->
-      <!-- Products Table Header -->
-<div id="productHeader" class="hidden md:grid product-row gap-2 mb-2 text-sm font-medium text-gray-700">
-  <div>Product</div>
-  <div>Structure</div>
-  <div>Finish</div>
-  <div>Length (ft)</div>
-  <div>Width (ft)</div>
-  <div>Rate (₹)</div>
-  <div>Amount (₹)</div>
-  <div></div>
-</div>
+      <div id="productHeader" class="hidden md:grid product-row gap-2 mb-2 text-xs sm:text-sm font-medium text-gray-700">
+        <div>Product</div>
+        <div>Structure</div>
+        <div>Finish</div>
+        <div>Length (ft)</div>
+        <div>breadth (ft)</div>
+        <div>Rate (₹)</div>
+        <div>Amount (₹)</div>
+        <div></div>
+      </div>
 
-<!-- Products Container -->
-<div id="productContainer" class="hidden space-y-4 mb-6"></div>
+      <!-- Products Container -->
+      <div id="productContainer" class="hidden space-y-2 sm:space-y-3 md:space-y-4 mb-4 sm:mb-6"></div>
 
-<!-- Add Buttons -->
-<div class="flex flex-wrap gap-3 mb-6">
-  <button onclick="addProduct()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition flex items-center gap-1">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-    </svg>
-    Add Product
-  </button>
-  <button onclick="addCustomProduct()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition flex items-center gap-1">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-    </svg>
-    Add Custom Product
-  </button>
+<!-- Rate Edit Modal -->
+<div id="rateModal" class="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center hidden z-50">
+  <div class="bg-white p-6 rounded shadow-md w-80">
+    <h2 class="text-lg font-bold mb-4">Edit Rate</h2>
+    <input id="rateInput" type="number" min="0" class="w-full p-2 border rounded mb-4" />
+    <div class="flex justify-end gap-2">
+      <button onclick="closeRateModal()" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+      <button onclick="saveRate()" class="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+    </div>
+  </div>
 </div>
 
 
-
-      <!-- Options -->
+      <!-- Add Buttons -->
+      <div class="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-6">
+        <button onclick="addProduct()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition flex items-center gap-1 text-sm sm:text-base">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          <span>Add Product</span>
+        </button>
+        <button onclick="openCustomProductModal()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition flex items-center gap-1 text-sm sm:text-base">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          <span>Add Custom</span>
+        </button>
+      </div>
 
       <!-- Totals -->
-      <div class="bg-gray-50 p-4 rounded-lg mb-6">
-        <div class="flex justify-between items-center">
+      <div class="bg-gray-50 p-3 sm:p-4 rounded-lg mb-4 sm:mb-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
-            <p id="subtotal" class="text-lg">Subtotal: ₹0.00</p>
-            <p id="total" class="text-xl font-bold mt-1">Total: ₹0.00</p>
+            <p id="subtotal" class="text-base sm:text-lg">Subtotal: ₹0.00</p>
+            <p id="total" class="text-lg sm:text-xl font-bold">Total: ₹0.00</p>
           </div>
-          <button onclick="generatePDF()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition flex items-center gap-1">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button onclick="generatePDF()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition flex items-center gap-1 w-full sm:w-auto justify-center text-sm sm:text-base">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
             </svg>
-            Generate PDF
+            <span>Generate PDF</span>
           </button>
         </div>
       </div>
@@ -130,202 +158,322 @@ class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:bo
   </div>
 
   <script>
-  const PRODUCTS = [
-    { name: "Wardrobe", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-    { name: "Loft", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-    { name: "Kitchen Kadapa Shelf", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-    { name: "Modular Kitchen", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-    { name: "Kitchen Wall Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-    { name: "Crockery Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-    { name: "Pooja Box", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-    { name: "TV Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-    { name: "Panelling Work", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] }
-  ];
+    // Initialize products array with localStorage data if available
+    let PRODUCTS = JSON.parse(localStorage.getItem('savedProducts')) || [
+      { name: "Wardrobe", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+      { name: "Loft", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+      { name: "Kitchen Kadapa Shelf", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+      { name: "Modular Kitchen", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+      { name: "Kitchen Wall Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+      { name: "Crockery Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+      { name: "Pooja Box", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+      { name: "TV Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+      { name: "Panelling Work", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] }
+    ];
 
-  let products = [];
-  let nextId = 0;
+    let products = [];
+    let nextId = 0;
+    let savedRates = JSON.parse(localStorage.getItem('savedRates')) || {};
 
-  const productContainer = document.getElementById("productContainer");
-  const productHeader = document.getElementById("productHeader");
-  const subtotalEl = document.getElementById("subtotal");
-  const totalEl = document.getElementById("total");
+    const productContainer = document.getElementById("productContainer");
+    const productHeader = document.getElementById("productHeader");
+    const subtotalEl = document.getElementById("subtotal");
+    const totalEl = document.getElementById("total");
 
-  document.addEventListener("DOMContentLoaded", () => {
-    addProduct();
-  });
-
-  function addProduct() {
-    showHeaderIfHidden();
-    const id = nextId++;
-    products.push({
-      id,
-      product: "Wardrobe",
-      structure: "MR-Commercial Plywood",
-      finish: "Prelam",
-      length: "",
-      width: "",
-      rate: "",
-      custom: false
-    });
-    renderProduct(id);
-    updateTotals();
-  }
-
-  function addCustomProduct() {
-    showHeaderIfHidden();
-    const defaultstructure = PRODUCTS[0].structure[0];
-    const defaultfinish = PRODUCTS[0].finish[0];
-
-    const id = nextId++;
-    products.push({
-      id,
-      product: "",
-      structure: defaultstructure,
-      finish: defaultfinish,
-      length: "",
-      width: "",
-      rate: "",
-      custom: true
-    });
-    renderProduct(id);
-    updateTotals();
-  }
-
-  function showHeaderIfHidden() {
-    productHeader.classList.remove("hidden");
-    productContainer.classList.remove("hidden");
-  }
-
-  function renderProduct(id) {
-    const product = products.find(p => p.id === id);
-    if (!product) return;
-
-    const row = document.createElement("div");
-    row.className = "product-row grid gap-2 items-center p-2 border rounded-lg";
-    row.id = `product-${id}`;
-
-    const structureOptions = PRODUCTS[0].structure.map(g =>
-      `<option ${g === product.structure ? 'selected' : ''}>${g}</option>`
-    ).join('');
-    const finishOptions = PRODUCTS[0].finish.map(m =>
-      `<option ${m === product.finish ? 'selected' : ''}>${m}</option>`
-    ).join('');
-
-    if (product.custom) {
-      row.innerHTML = `
-        <input type="text" placeholder="Product Name" value="${product.product}" 
-               onchange="updateProduct(${id}, 'product', this.value)" class="p-2 border rounded">
-        <select onchange="updateProduct(${id}, 'structure', this.value)" class="p-2 border rounded">
-          ${structureOptions}
-        </select>
-        <select onchange="updateProduct(${id}, 'finish', this.value)" class="p-2 border rounded">
-          ${finishOptions}
-        </select>
-        <input type="number" min="0" step="0.1" value="${product.length}" 
-               onchange="updateProduct(${id}, 'length', parseFloat(this.value))" class="p-2 border rounded" placeholder="Length">
-        <input type="number" min="0" step="0.1" value="${product.width}" 
-               onchange="updateProduct(${id}, 'width', parseFloat(this.value))" class="p-2 border rounded" placeholder="Width">
-        <input type="number" min="0" value="${product.rate}" 
-               onchange="updateProduct(${id}, 'rate', parseFloat(this.value))" class="p-2 border rounded" placeholder="Rate">
-        <input type="text" readonly value="${calculateAmount(product)}" 
-               class="p-2 border rounded bg-gray-100">
-        <button onclick="removeProduct(${id})" class="text-red-500 hover:text-red-700 p-1">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-          </svg>
-        </button>
-      `;
-    } else {
-      const productOptions = PRODUCTS.map(p =>
-        `<option value="${p.name}" ${p.name === product.product ? 'selected' : ''}>${p.name}</option>`
-      ).join('');
-      const selectedProduct = PRODUCTS.find(p => p.name === product.product) || PRODUCTS[0];
-      const structureOptions = selectedProduct.structure.map(g =>
-        `<option ${g === product.structure ? 'selected' : ''}>${g}</option>`
-      ).join('');
-      const finishOptions = selectedProduct.finish.map(m =>
-        `<option ${m === product.finish ? 'selected' : ''}>${m}</option>`
-      ).join('');
-
-      row.innerHTML = `
-        <select onchange="updateProduct(${id}, 'product', this.value)" class="p-2 border rounded">
-          ${productOptions}
-        </select>
-        <select onchange="updateProduct(${id}, 'structure', this.value)" class="p-2 border rounded">
-          ${structureOptions}
-        </select>
-        <select onchange="updateProduct(${id}, 'finish', this.value)" class="p-2 border rounded">
-          ${finishOptions}
-        </select>
-        <input type="number" min="0" step="0.1" value="${product.length}" 
-               onchange="updateProduct(${id}, 'length', parseFloat(this.value))" class="p-2 border rounded" placeholder="Length">
-        <input type="number" min="0" step="0.1" value="${product.width}" 
-               onchange="updateProduct(${id}, 'width', parseFloat(this.value))" class="p-2 border rounded" placeholder="Width">
-        <input type="number" min="0" value="${product.rate}" 
-               onchange="updateProduct(${id}, 'rate', parseFloat(this.value))" class="p-2 border rounded" placeholder="Rate">
-        <input type="text" readonly value="${calculateAmount(product)}" 
-               class="p-2 border rounded bg-gray-100">
-        <button onclick="removeProduct(${id})" class="text-red-500 hover:text-red-700 p-1">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-          </svg>
-        </button>
-      `;
-    }
-
-    productContainer.appendChild(row);
-  }
-
-  function updateProduct(id, property, value) {
-    const product = products.find(p => p.id === id);
-    if (!product) return;
-
-    product[property] = value;
-
-    // If product type changes, reset structure and finish
-    if (property === 'product' && !product.custom) {
-      const selectedProduct = PRODUCTS.find(p => p.name === value);
-      if (selectedProduct) {
-        product.structure = selectedProduct.structure[0];
-        product.finish = selectedProduct.finish[0];
+    document.addEventListener("DOMContentLoaded", () => {
+      addProduct();
+      // Set today's date automatically in the date input field
+      const dateInput = document.getElementById("dateInput");
+      if (dateInput) {
+        const today = new Date().toISOString().split("T")[0];
+        dateInput.value = today;
       }
-    }
-
-    const row = document.getElementById(`product-${id}`);
-    if (row) row.remove(); // Re-render the row
-    renderProduct(id);
-    updateTotals();
-  }
-
-  function calculateAmount(p) {
-    const area = (parseFloat(p.length) || 0) * (parseFloat(p.width) || 0);
-    const rate = parseFloat(p.rate) || 0;
-    return (area * rate).toFixed(2);
-  }
-
-  function removeProduct(id) {
-    products = products.filter(p => p.id !== id);
-    const row = document.getElementById(`product-${id}`);
-    if (row) row.remove();
-    if (products.length === 0) {
-      productContainer.classList.add("hidden");
-      productHeader.classList.add("hidden");
-    }
-    updateTotals();
-  }
-
-  function updateTotals() {
-    let subtotal = 0;
-    products.forEach(p => {
-      subtotal += parseFloat(calculateAmount(p));
     });
-    subtotalEl.textContent = `Subtotal: ₹${subtotal.toFixed(2)}`;
-    totalEl.textContent = `Total: ₹${subtotal.toFixed(2)}`;
+
+    function addProduct() {
+      showHeaderIfHidden();
+      const id = nextId++;
+      // Check if we have a saved rate for this product type
+      const defaultRate = savedRates["Wardrobe-MR-Commercial Plywood-Prelam"] || "";
+      
+      products.push({
+        id,
+        product: "Wardrobe",
+        structure: "MR-Commercial Plywood",
+        finish: "Prelam",
+        length: "",
+        breadth: "",
+        rate: defaultRate,
+        custom: false
+      });
+      renderProduct(id);
+      updateTotals();
+    }
+
+    function openCustomProductModal() {
+      const modal = document.getElementById("customProductModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+
+      // Populate structure/finish from default
+      const structureSelect = document.getElementById("customStructure");
+      const finishSelect = document.getElementById("customFinish");
+      structureSelect.innerHTML = PRODUCTS[0].structure.map(s => `<option>${s}</option>`).join('');
+      finishSelect.innerHTML = PRODUCTS[0].finish.map(f => `<option>${f}</option>`).join('');
+    }
+
+    function closeCustomProductModal() {
+      const modal = document.getElementById("customProductModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+
+      document.getElementById("customProductName").value = '';
+      document.getElementById("customRate").value = '';
+    }
+
+    function saveCustomProduct() {
+      const productName = document.getElementById("customProductName").value.trim();
+      const structure = document.getElementById("customStructure").value;
+      const finish = document.getElementById("customFinish").value;
+      const rate = parseFloat(document.getElementById("customRate").value);
+
+      if (!productName || isNaN(rate)) {
+        alert("Please enter valid product name and rate.");
+        return;
+      }
+
+      // Check if product already exists
+      const existingProduct = PRODUCTS.find(p => p.name.toLowerCase() === productName.toLowerCase());
+      
+      if (!existingProduct) {
+        // Add new product to PRODUCTS array
+        PRODUCTS.push({
+          name: productName,
+          structure: PRODUCTS[0].structure, // Use default structures
+          finish: PRODUCTS[0].finish // Use default finishes
+        });
+        // Save to localStorage
+        localStorage.setItem('savedProducts', JSON.stringify(PRODUCTS));
+      }
+
+      // Save the rate for this product type
+      const rateKey = `${productName}-${structure}-${finish}`;
+      savedRates[rateKey] = rate;
+      localStorage.setItem('savedRates', JSON.stringify(savedRates));
+
+      // Add the product to the list (not as custom)
+      const id = nextId++;
+      products.push({
+        id,
+        product: productName,
+        structure,
+        finish,
+        length: "",
+        breadth: "",
+        rate,
+        custom: false
+      });
+
+      closeCustomProductModal();
+      showHeaderIfHidden();
+      renderProduct(id);
+      updateTotals();
+    }
+
+    function showHeaderIfHidden() {
+      productHeader.classList.remove("hidden");
+      productContainer.classList.remove("hidden");
+    }
+
+   let currentRateEditId = null;
+
+function renderProduct(id) {
+  const product = products.find(p => p.id === id);
+  if (!product) return;
+
+  const row = document.createElement("div");
+  row.className = "product-row grid gap-2 items-center p-2 border rounded-lg";
+  row.id = `product-${id}`;
+
+  const productOptions = PRODUCTS.map(p =>
+    `<option value="${p.name}" ${p.name === product.product ? 'selected' : ''}>${p.name}</option>`
+  ).join('');
+  const selectedProduct = PRODUCTS.find(p => p.name === product.product) || PRODUCTS[0];
+  const structureOptions = selectedProduct.structure.map(g =>
+    `<option ${g === product.structure ? 'selected' : ''}>${g}</option>`
+  ).join('');
+  const finishOptions = selectedProduct.finish.map(m =>
+    `<option ${m === product.finish ? 'selected' : ''}>${m}</option>`
+  ).join('');
+
+  row.innerHTML = `
+    <select onchange="updateProduct(${id}, 'product', this.value)" class="p-2 border rounded">
+      ${productOptions}
+    </select>
+    <select onchange="updateProduct(${id}, 'structure', this.value)" class="p-2 border rounded">
+      ${structureOptions}
+    </select>
+    <select onchange="updateProduct(${id}, 'finish', this.value)" class="p-2 border rounded">
+      ${finishOptions}
+    </select>
+    <input type="number" min="0" step="0.1" value="${product.length}" 
+           oninput="updateDimension(${id}, 'length', this.value)" class="p-2 border rounded" placeholder="Length">
+    <input type="number" min="0" step="0.1" value="${product.breadth}" 
+           oninput="updateDimension(${id}, 'breadth', this.value)" class="p-2 border rounded" placeholder="breadth">
+   <div class="flex items-center gap-2">
+  <span>₹${product.rate}</span>
+  <button onclick="openRateModal(${id})" class="text-blue-500 hover:text-blue-700">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3zM3 21h18" />
+    </svg>
+  </button>
+</div>
+
+    <input type="text" readonly value="${calculateAmount(product)}" 
+           class="p-2 border rounded bg-gray-100">
+    <button onclick="removeProduct(${id})" class="text-red-500 hover:text-red-700 p-1">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+      </svg>
+    </button>
+  `;
+
+  productContainer.appendChild(row);
+}
+
+
+    function openRateModal(id) {
+  const product = products.find(p => p.id === id);
+  if (!product) return;
+
+  currentRateEditId = id;
+  document.getElementById("rateInput").value = product.rate;
+  document.getElementById("rateModal").classList.remove("hidden");
+}
+
+function closeRateModal() {
+  document.getElementById("rateModal").classList.add("hidden");
+  currentRateEditId = null;
+}
+
+function saveRate() {
+  const newRate = parseFloat(document.getElementById("rateInput").value) || 0;
+  if (currentRateEditId !== null) {
+    const product = products.find(p => p.id === currentRateEditId);
+    product.rate = newRate;
+
+    const row = document.getElementById(`product-${product.id}`);
+    if (row) row.remove();
+
+    renderProduct(product.id);
+    updateTotals();
+  }
+  closeRateModal();
+}
+
+function updateDimension(id, field, value) {
+  const product = products.find(p => p.id === id);
+  if (!product) return;
+
+  product[field] = parseFloat(value) || 0;
+
+  // Update the amount live
+  const row = document.getElementById(`product-${id}`);
+  if (row) {
+    const amountInput = row.querySelector('input[readonly]');
+    if (amountInput) {
+      amountInput.value = calculateAmount(product);
+    }
   }
 
+  updateTotals();
+}
 
 
-  function generatePDF() {
+    function updateDimensions(id, value, dimension) {
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+
+      product[dimension] = value;
+      updateAmount(id);
+    }
+
+    function updateRate(id, value) {
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+
+      product.rate = value;
+      updateAmount(id);
+    }
+
+    function updateAmount(id) {
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+
+      const row = document.getElementById(`product-${id}`);
+      if (row) {
+        const amountInput = row.querySelector('input[readonly]');
+        if (amountInput) {
+          amountInput.value = calculateAmount(product);
+        }
+      }
+      updateTotals();
+    }
+
+    function updateProduct(id, property, value) {
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+
+      product[property] = value;
+
+      // If product type changes, reset structure and finish
+      if (property === 'product') {
+        const selectedProduct = PRODUCTS.find(p => p.name === value);
+        if (selectedProduct) {
+          product.structure = selectedProduct.structure[0];
+          product.finish = selectedProduct.finish[0];
+        }
+      }
+
+      const row = document.getElementById(`product-${id}`);
+      if (row) row.remove(); // Re-render the row
+      renderProduct(id);
+      updateTotals();
+    }
+
+    function calculateAmount(p) {
+      const area = (parseFloat(p.length) || 0) * (parseFloat(p.breadth) || 0);
+      const rate = parseFloat(p.rate) || 0;
+      return (area * rate).toFixed(2);
+    }
+
+    function removeProduct(id) {
+      products = products.filter(p => p.id !== id);
+      const row = document.getElementById(`product-${id}`);
+      if (row) row.remove();
+      if (products.length === 0) {
+        productContainer.classList.add("hidden");
+        productHeader.classList.add("hidden");
+      }
+      updateTotals();
+    }
+
+    function updateTotals() {
+      let subtotal = 0;
+      products.forEach(p => {
+        subtotal += parseFloat(calculateAmount(p));
+      });
+      subtotalEl.textContent = `Subtotal: ₹${subtotal.toFixed(2)}`;
+      totalEl.textContent = `Total: ₹${subtotal.toFixed(2)}`;
+    }
+
+
+
+
+
+
+    function generatePDF() {
   const clientName = document.querySelector('input[type="text"]').value || 'Not provided';
   const clientPhone = document.querySelector('input[type="tel"]').value || 'Not provided';
   const date = document.getElementById('dateInput').value || new Date().toLocaleDateString();
@@ -369,45 +517,42 @@ class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:bo
   `;
 
   let tableHTML = `
-    <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 12px;">
-      <thead>
-        <tr style="background-color: #f3f4f6;">
-          <th style="padding: 8px; border: 1px solid #d1d5db; text-align: left;">Product</th>
-          <th style="padding: 8px; border: 1px solid #d1d5db; text-align: left;">Structure</th>
-          <th style="padding: 8px; border: 1px solid #d1d5db; text-align: left;">Finish</th>
-          <th style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">Dimensions (ft)</th>
-          <th style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">Rate (₹)</th>
-          <th style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">Amount (₹)</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-
-  products.forEach(product => {
-    const dimensions = `${product.length || 0} × ${product.width || 0}`;
-    tableHTML += `
-      <tr>
-        <td style="padding: 8px; border: 1px solid #d1d5db;">${product.product || 'Custom'}</td>
-        <td style="padding: 8px; border: 1px solid #d1d5db;">${product.structure}</td>
-        <td style="padding: 8px; border: 1px solid #d1d5db;">${product.finish}</td>
-        <td style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">${dimensions}</td>
-        <td style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">${product.rate || 0}</td>
-        <td style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">${calculateAmount(product)}</td>
+  <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 12px;">
+    <thead>
+      <tr style="background-color: #f3f4f6;">
+        <th style="padding: 8px; border: 1px solid #d1d5db; text-align: left;">Description</th>
+        <th style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">Length (ft)</th>
+        <th style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">Breadth (ft)</th>
+        <th style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">Amount (₹)</th>
       </tr>
-    `;
-  });
+    </thead>
+    <tbody>
+`;
 
-  const subtotal = products.reduce((sum, p) => sum + parseFloat(calculateAmount(p)), 0);
+products.forEach(product => {
+  const description = `MR-${product.structure} wardrobe with ${product.finish} finish`;
   tableHTML += `
-      </tbody>
-    </table>
-    <div style="text-align: right; margin: 20px 0;">
-      <p style="font-size: 14px;"><strong>Subtotal:</strong> ₹${subtotal.toFixed(2)}</p>
-      <p style="font-size: 16px; font-weight: bold;"><strong>Total:</strong> ₹${subtotal.toFixed(2)}</p>
-    </div>
+    <tr>
+      <td style="padding: 8px; border: 1px solid #d1d5db;">${description}</td>
+      <td style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">${product.length || 0}</td>
+      <td style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">${product.breadth || 0}</td>
+      <td style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">${calculateAmount(product)}</td>
+    </tr>
   `;
+});
 
-  element.innerHTML += tableHTML;
+const subtotal = products.reduce((sum, p) => sum + parseFloat(calculateAmount(p)), 0);
+
+tableHTML += `
+    </tbody>
+  </table>
+  <div style="text-align: right; margin: 20px 0;">
+    <p style="font-size: 14px;"><strong>Subtotal:</strong> ₹${subtotal.toFixed(2)}</p>
+    <p style="font-size: 16px; font-weight: bold;"><strong>Total:</strong> ₹${subtotal.toFixed(2)}</p>
+  </div>
+`;
+
+element.innerHTML += tableHTML;
 
   // Page break here for second page
   element.innerHTML += `<div style="page-break-after: always;"></div>`;
@@ -477,17 +622,6 @@ class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:bo
   html2pdf().set(opt).from(element).save();
 }
 
-
-   // Set today's date automatically in the date input field
-    const dateInput = document.getElementById("dateInput");
-    if (dateInput) {
-      const today = new Date().toISOString().split("T")[0];
-      dateInput.value = today;
-    }
-
-
-</script>
-
-
+  </script>
 </body>
 </html>
