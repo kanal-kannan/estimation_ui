@@ -1,254 +1,493 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Creative Design Studios</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interior Work Estimator</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-  <link rel="icon" type="image/x-icon" href="/assets/logo.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+
+  <style>
+  .product-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 0.8fr 0.8fr 0.8fr 0.8fr auto;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .product-row {
+      grid-template-columns: 1fr;
+    }
+
+    .product-row > * {
+      grid-column: 1 / -1;
+    }
+  }
+
+  input, select {
+    width: 100%;
+  }
+
+  .hidden {
+  display: none !important;
+}
+
+</style>
+
+
 </head>
-<body class="bg-white font-sans text-gray-900 min-h-screen">
-  <div class="flex items-start justify-center min-h-screen p-4 sm:p-8">
-    <main class="relative bg-white/60 backdrop-blur-lg shadow-xl w-full max-w-7xl p-6 sm:p-10 rounded-3xl">
-      <div class="absolute rounded-tr-full bottom-0 left-0 -z-10 bg-gradient-to-r from-blue-400 to-blue-300/50 w-1/4 h-[100px]"></div>
-      
-      <!-- Header -->
-      <header class="flex justify-between items-center mb-10">
-        <h1 class="text-4xl font-extrabold text-gray-800 tracking-wide">Interior Work Estimator</h1>
-      </header>
 
-      <!-- Main Grid: Client Info Left + Add Product Right -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <!-- Client Info -->
-        <div class="bg-blue-100/80 backdrop-blur-lg border-4 border-blue-300/20 p-6 rounded-2xl shadow-md">
-          <h2 class="text-xl font-bold text-gray-800 mb-4">Client Information</h2>
-          <form class="space-y-4">
-            <div>
-              <label class="text-sm font-medium" for="clientName">Client Name</label>
-              <input type="text" id="clientName" required class="w-full bg-white/60 focus:border-2 border-blue-300 outline-none rounded-lg px-4 py-2 mt-1 shadow-inner" placeholder="Enter Your Name" oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')" />
-            </div>
-            <div>
-              <label class="text-sm font-medium" for="phoneNumber">Phone Number</label>
-              <input type="tel" id="phoneNumber" maxlength="10" minlength="10" pattern="[0-9]{10}" required class="w-full bg-white/60 focus:border-2 border-blue-300 outline-none rounded-lg px-4 py-2 mt-1 shadow-inner" placeholder="Enter 10-digit number" title="Please enter exactly 10 digits" />
-              <span id="phoneError" class="text-red-600 text-sm mt-1 hidden">Please enter correct mobile number</span>
-            </div>
-            <div>
-              <label class="text-sm font-medium" for="dateInput">Date</label>
-              <input type="date" id="dateInput" required class="w-full bg-white/60 focus:border-2 border-blue-300 outline-none rounded-lg px-4 py-2 mt-1 shadow-inner" />
-            </div>
-          </form>
-          <!-- Total Amount -->
-          <div class="mt-6 pt-4 border-t border-blue-300">
-            <p class="text-lg font-semibold text-gray-800">Total Amount:</p>
-            <p class="text-xl font-extrabold text-[#2c3e50]" id="totalAmount">₹0</p>
-          </div>
-        </div>
-
-        <!-- Add Product Form -->
-        <div class="bg-blue-50 p-6 rounded-2xl shadow-xl border-4 border-blue-200/50">
-          <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bold text-gray-800">Add Product</h2>
-          </div>
-
-          <form id="productForm" class="space-y-6">
-            <div class="grid md:grid-cols-3 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Product</label>
-                <select id="product" required class="w-full border border-gray-300 focus:border-blue-500 rounded-lg px-4 py-2">
-                  <option value="">Select Product</option>
-                  <option value="LOFT">Loft</option>
-                  <option value="KITCHEN_KADAPA_SHELF">Kitchen Kadapa Shelf</option>
-                  <option value="MODULAR_KITCHEN">Modular Kitchen</option>
-                  <option value="KITCHEN_WALL_UNIT">Kitchen Wall Unit</option>
-                  <option value="CROCKERY_UNIT">Crockery Unit</option>
-                  <option value="POOJA_BOX">Pooja Box</option>
-                  <option value="TV_UNIT">TV Unit</option>
-                  <option value="PANELING_WORK">Panelling Work</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Structure</label>
-                <select id="structure" required class="w-full border border-gray-300 focus:border-blue-500 rounded-lg px-4 py-2">
-                  <option value="">Select Structure</option>
-                  <option value="MR_COMMERCIAL_PLYWOOD">MR Commercial Plywood</option>
-                  <option value="BWR_PLYWOOD">BWR Plywood</option>
-                  <option value="BWP_PLYWOOD">BWP Plywood</option>
-                  <option value="MDF_PANEL">MDF Panel</option>
-                  <option value="HMR_PANEL">HMR Panel</option>
-                  <option value="HDHMR_PANEL">HD HMR Panel</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Finish</label>
-                <select id="finish" required class="w-full border border-gray-300 focus:border-blue-500 rounded-lg px-4 py-2">
-                  <option value="">Select Finish</option>
-                  <option value="PRELAM">Prelam</option>
-                  <option value="LAMINATE">Laminate</option>
-                  <option value="ACRYLIC">Acrylic</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Dimensions -->
-            <div class="grid md:grid-cols-3 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Length (ft)</label>
-                <input type="number" id="length" required class="w-full border border-gray-300 focus:border-blue-500 rounded-lg px-4 py-2" />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Breadth (ft)</label>
-                <input type="number" id="breadth" required class="w-full border border-gray-300 focus:border-blue-500 rounded-lg px-4 py-2" />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Rate (₹/unit)</label>
-                <input type="number" id="rate" required class="w-full border border-gray-300 focus:border-blue-500 rounded-lg px-4 py-2" />
-              </div>
-            </div>
-
-            <!-- Notes -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Customer Notes</label>
-              <textarea id="customerNotes" rows="3" placeholder="Any special instructions..." class="w-full border border-gray-300 focus:border-blue-500 rounded-lg px-4 py-2 resize-none"></textarea>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="flex justify-end gap-4">
-              <button type="reset" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-6 rounded-lg">Cancel</button>
-              <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow" id="generateEstimateBtn">
-                <i class="fas fa-save mr-2"></i> Generate Estimate
-              </button>
-            </div>
-          </form>
-        </div>
+<body class="bg-gray-50 min-h-screen p-4 md:p-8">
+  <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+    <!-- Header -->
+    <div class="bg-blue-600 text-white p-6">
+      <div class="flex justify-between items-center">
+        <h1 class="text-2xl md:text-3xl font-bold">Interior Work Estimator</h1>
+        <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
       </div>
-      
-      <!-- Estimation View Card -->
-      <div id="estimationViewCard" class="mt-10 hidden bg-white border border-blue-200 p-6 rounded-xl shadow-md">
-        <h3 class="text-lg font-bold mb-4 text-blue-700">Latest Estimation Details</h3>
-        <div id="estimationDetails" class="space-y-2 text-gray-800 text-sm">
-          <!-- Populated dynamically if needed -->
+    </div>
+
+    <div class="p-6">
+      <!-- Client Information -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Client Name</label>
+          <input type="text" placeholder="Enter Your Name"  class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+          <input type="tel"  maxlength="10" 
+          minlength="10"
+          pattern="[0-9]{10}" 
+          required  
+          placeholder="Enter 10-digit number"
+          title="Please enter exactly 10 digits"
+
+class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+          <input type="date"id="dateInput" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
         </div>
       </div>
 
-      <!-- Hidden PDF Link (if needed) -->
-      <a id="pdfLink" class="hidden" download></a>
+      <!-- Products Table Header -->
+      <!-- Products Table Header -->
+<div id="productHeader" class="hidden md:grid product-row gap-2 mb-2 text-sm font-medium text-gray-700">
+  <div>Product</div>
+  <div>Structure</div>
+  <div>Finish</div>
+  <div>Length (ft)</div>
+  <div>Width (ft)</div>
+  <div>Rate (₹)</div>
+  <div>Amount (₹)</div>
+  <div></div>
+</div>
 
-    </main>
+<!-- Products Container -->
+<div id="productContainer" class="hidden space-y-4 mb-6"></div>
+
+<!-- Add Buttons -->
+<div class="flex flex-wrap gap-3 mb-6">
+  <button onclick="addProduct()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition flex items-center gap-1">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+    </svg>
+    Add Product
+  </button>
+  <button onclick="addCustomProduct()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition flex items-center gap-1">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+    </svg>
+    Add Custom Product
+  </button>
+</div>
+
+
+
+      <!-- Options -->
+
+      <!-- Totals -->
+      <div class="bg-gray-50 p-4 rounded-lg mb-6">
+        <div class="flex justify-between items-center">
+          <div>
+            <p id="subtotal" class="text-lg">Subtotal: ₹0.00</p>
+            <p id="total" class="text-xl font-bold mt-1">Total: ₹0.00</p>
+          </div>
+          <button onclick="generatePDF()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition flex items-center gap-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+            </svg>
+            Generate PDF
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="hidden"></div>
-
   <script>
-    const productForm = document.getElementById("productForm");
-    const pdfLink = document.getElementById("pdfLink");
-    const generateEstimateBtn = document.getElementById("generateEstimateBtn");
+  const PRODUCTS = [
+    { name: "Wardrobe", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+    { name: "Loft", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+    { name: "Kitchen Kadapa Shelf", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+    { name: "Modular Kitchen", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+    { name: "Kitchen Wall Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+    { name: "Crockery Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+    { name: "Pooja Box", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+    { name: "TV Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
+    { name: "Panelling Work", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] }
+  ];
 
-    const clientInputs = {
-      name: document.getElementById("clientName"),
-      phoneNumber: document.getElementById("phoneNumber"),
-      date: document.getElementById("dateInput")
-    };
+  let products = [];
+  let nextId = 0;
 
-    let products = [];
+  const productContainer = document.getElementById("productContainer");
+  const productHeader = document.getElementById("productHeader");
+  const subtotalEl = document.getElementById("subtotal");
+  const totalEl = document.getElementById("total");
 
-    function showToast(message, color = "bg-green-500") {
-      const toast = document.getElementById("toast");
-      toast.className = `fixed top-5 right-5 text-white text-sm px-4 py-2 rounded shadow-lg z-50 transition-opacity duration-300 ${color}`;
-      toast.textContent = message;
-      toast.classList.remove("hidden");
-      setTimeout(() => toast.classList.add("hidden"), 3000);
-    }
+  document.addEventListener("DOMContentLoaded", () => {
+    addProduct();
+  });
 
-    async function fetchProducts() {
-      try {
-        const response = await fetch("http://localhost:3000/api/estimations");
-        if (!response.ok) throw new Error("Failed to fetch estimations");
-
-        const data = await response.json();
-        // You can update a list or table here if needed.
-        showToast("Fetched estimations successfully!");
-      } catch (err) {
-        console.error(err);
-        showToast("Error fetching estimations", "bg-red-500");
-      }
-    }
-
-    productForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const productData = {
-        product: document.getElementById("product").value,
-        structure: document.getElementById("structure").value,
-        finish: document.getElementById("finish").value,
-        length: parseFloat(document.getElementById("length").value),
-        breadth: parseFloat(document.getElementById("breadth").value),
-        rate: parseFloat(document.getElementById("rate").value),
-        customerNotes: document.getElementById("customerNotes").value
-      };
-
-      const clientData = {
-        clientName: clientInputs.name.value,
-        phoneNumber: clientInputs.phoneNumber.value,
-        date: clientInputs.date.value
-      };
-
-      const hasEmpty = Object.values({ ...productData, ...clientData }).some(v => !v);
-      if (hasEmpty) {
-        showToast("All fields must be filled before submitting!", "bg-red-500");
-        return;
-      }
-
-      const payload = { ...clientData, ...productData };
-
-      try {
-        const response = await fetch("http://localhost:3000/api/estimations", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.error || "Failed to save estimation.");
-
-        products.push(payload);
-        // productForm.reset();
-        updateSummary(result.amount);
-        showToast("Estimation saved successfully!");
-
-        // Automatically download the PDF
-        const pdfUrl = `http://localhost:3000/api/estimations/${result.id}/pdf`;
-        const tempLink = document.createElement("a");
-        tempLink.href = pdfUrl;
-        tempLink.download = `Estimation-${result.id}.pdf`;
-        document.body.appendChild(tempLink);
-        tempLink.click();
-        document.body.removeChild(tempLink);
-
-        fetchProducts(); // Optionally refresh the estimations list
-
-      } catch (err) {
-        showToast(`Error: ${err.message}`, "bg-red-500");
-      }
+  function addProduct() {
+    showHeaderIfHidden();
+    const id = nextId++;
+    products.push({
+      id,
+      product: "Wardrobe",
+      structure: "MR-Commercial Plywood",
+      finish: "Prelam",
+      length: "",
+      width: "",
+      rate: "",
+      custom: false
     });
+    renderProduct(id);
+    updateTotals();
+  }
 
-    function updateSummary(total) {
-      document.getElementById("totalAmount").textContent = `₹${parseFloat(total).toFixed(2)}`;
+  function addCustomProduct() {
+    showHeaderIfHidden();
+    const defaultstructure = PRODUCTS[0].structure[0];
+    const defaultfinish = PRODUCTS[0].finish[0];
+
+    const id = nextId++;
+    products.push({
+      id,
+      product: "",
+      structure: defaultstructure,
+      finish: defaultfinish,
+      length: "",
+      width: "",
+      rate: "",
+      custom: true
+    });
+    renderProduct(id);
+    updateTotals();
+  }
+
+  function showHeaderIfHidden() {
+    productHeader.classList.remove("hidden");
+    productContainer.classList.remove("hidden");
+  }
+
+  function renderProduct(id) {
+    const product = products.find(p => p.id === id);
+    if (!product) return;
+
+    const row = document.createElement("div");
+    row.className = "product-row grid gap-2 items-center p-2 border rounded-lg";
+    row.id = `product-${id}`;
+
+    const structureOptions = PRODUCTS[0].structure.map(g =>
+      `<option ${g === product.structure ? 'selected' : ''}>${g}</option>`
+    ).join('');
+    const finishOptions = PRODUCTS[0].finish.map(m =>
+      `<option ${m === product.finish ? 'selected' : ''}>${m}</option>`
+    ).join('');
+
+    if (product.custom) {
+      row.innerHTML = `
+        <input type="text" placeholder="Product Name" value="${product.product}" 
+               onchange="updateProduct(${id}, 'product', this.value)" class="p-2 border rounded">
+        <select onchange="updateProduct(${id}, 'structure', this.value)" class="p-2 border rounded">
+          ${structureOptions}
+        </select>
+        <select onchange="updateProduct(${id}, 'finish', this.value)" class="p-2 border rounded">
+          ${finishOptions}
+        </select>
+        <input type="number" min="0" step="0.1" value="${product.length}" 
+               onchange="updateProduct(${id}, 'length', parseFloat(this.value))" class="p-2 border rounded" placeholder="Length">
+        <input type="number" min="0" step="0.1" value="${product.width}" 
+               onchange="updateProduct(${id}, 'width', parseFloat(this.value))" class="p-2 border rounded" placeholder="Width">
+        <input type="number" min="0" value="${product.rate}" 
+               onchange="updateProduct(${id}, 'rate', parseFloat(this.value))" class="p-2 border rounded" placeholder="Rate">
+        <input type="text" readonly value="${calculateAmount(product)}" 
+               class="p-2 border rounded bg-gray-100">
+        <button onclick="removeProduct(${id})" class="text-red-500 hover:text-red-700 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+          </svg>
+        </button>
+      `;
+    } else {
+      const productOptions = PRODUCTS.map(p =>
+        `<option value="${p.name}" ${p.name === product.product ? 'selected' : ''}>${p.name}</option>`
+      ).join('');
+      const selectedProduct = PRODUCTS.find(p => p.name === product.product) || PRODUCTS[0];
+      const structureOptions = selectedProduct.structure.map(g =>
+        `<option ${g === product.structure ? 'selected' : ''}>${g}</option>`
+      ).join('');
+      const finishOptions = selectedProduct.finish.map(m =>
+        `<option ${m === product.finish ? 'selected' : ''}>${m}</option>`
+      ).join('');
+
+      row.innerHTML = `
+        <select onchange="updateProduct(${id}, 'product', this.value)" class="p-2 border rounded">
+          ${productOptions}
+        </select>
+        <select onchange="updateProduct(${id}, 'structure', this.value)" class="p-2 border rounded">
+          ${structureOptions}
+        </select>
+        <select onchange="updateProduct(${id}, 'finish', this.value)" class="p-2 border rounded">
+          ${finishOptions}
+        </select>
+        <input type="number" min="0" step="0.1" value="${product.length}" 
+               onchange="updateProduct(${id}, 'length', parseFloat(this.value))" class="p-2 border rounded" placeholder="Length">
+        <input type="number" min="0" step="0.1" value="${product.width}" 
+               onchange="updateProduct(${id}, 'width', parseFloat(this.value))" class="p-2 border rounded" placeholder="Width">
+        <input type="number" min="0" value="${product.rate}" 
+               onchange="updateProduct(${id}, 'rate', parseFloat(this.value))" class="p-2 border rounded" placeholder="Rate">
+        <input type="text" readonly value="${calculateAmount(product)}" 
+               class="p-2 border rounded bg-gray-100">
+        <button onclick="removeProduct(${id})" class="text-red-500 hover:text-red-700 p-1">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+          </svg>
+        </button>
+      `;
     }
 
-    // Set today's date automatically in the date input field
+    productContainer.appendChild(row);
+  }
+
+  function updateProduct(id, property, value) {
+    const product = products.find(p => p.id === id);
+    if (!product) return;
+
+    product[property] = value;
+
+    // If product type changes, reset structure and finish
+    if (property === 'product' && !product.custom) {
+      const selectedProduct = PRODUCTS.find(p => p.name === value);
+      if (selectedProduct) {
+        product.structure = selectedProduct.structure[0];
+        product.finish = selectedProduct.finish[0];
+      }
+    }
+
+    const row = document.getElementById(`product-${id}`);
+    if (row) row.remove(); // Re-render the row
+    renderProduct(id);
+    updateTotals();
+  }
+
+  function calculateAmount(p) {
+    const area = (parseFloat(p.length) || 0) * (parseFloat(p.width) || 0);
+    const rate = parseFloat(p.rate) || 0;
+    return (area * rate).toFixed(2);
+  }
+
+  function removeProduct(id) {
+    products = products.filter(p => p.id !== id);
+    const row = document.getElementById(`product-${id}`);
+    if (row) row.remove();
+    if (products.length === 0) {
+      productContainer.classList.add("hidden");
+      productHeader.classList.add("hidden");
+    }
+    updateTotals();
+  }
+
+  function updateTotals() {
+    let subtotal = 0;
+    products.forEach(p => {
+      subtotal += parseFloat(calculateAmount(p));
+    });
+    subtotalEl.textContent = `Subtotal: ₹${subtotal.toFixed(2)}`;
+    totalEl.textContent = `Total: ₹${subtotal.toFixed(2)}`;
+  }
+
+
+
+  function generatePDF() {
+  const clientName = document.querySelector('input[type="text"]').value || 'Not provided';
+  const clientPhone = document.querySelector('input[type="tel"]').value || 'Not provided';
+  const date = document.getElementById('dateInput').value || new Date().toLocaleDateString();
+
+  const element = document.createElement('div');
+  element.style.padding = '20px';
+  element.style.fontFamily = 'Arial, sans-serif';
+
+  element.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+  <div style="flex: 2; font-size: 12px; color: #555; line-height: 1.3;">
+    <div>No. 3, Aruna Nagar, Medical College Road,</div>
+    <div>Thanjavur – 613004, Tamil Nadu</div>
+    <div>📞 <a href="tel:+918825696139">+91 88256 96139</a> | ✉️ <a href="mailto:mail@creativedesignstudios.in">mail@creativedesignstudios.in</a></div>
+    <div>🌐 <a href="https://www.creativedesignstudios.in">www.creativedesignstudios.in</a></div>
+  </div>
+
+  <div style="flex: 1; text-align: right;">
+    <img src="assets/Logo small file.png" alt="Logo" style="height: 60px;" crossorigin="anonymous">
+  </div>
+</div>
+
+  
+</div>
+
+<h1 style="color: #FD9800; font-size: 24px; font-weight: bold; text-align: center; margin-top: -10px; margin-bottom: 20px;">
+  Interior Work Estimate
+</h1>
+
+
+      <div style="display: flex; justify-content: space-between; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+        <div style="text-align: left;">
+          <p><strong>Client:</strong> ${clientName}</p>
+          <p><strong>Phone:</strong> ${clientPhone}</p>
+        </div>
+        <div style="text-align: right;">
+          <p><strong>Date:</strong> ${date}</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  let tableHTML = `
+    <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 12px;">
+      <thead>
+        <tr style="background-color: #f3f4f6;">
+          <th style="padding: 8px; border: 1px solid #d1d5db; text-align: left;">Product</th>
+          <th style="padding: 8px; border: 1px solid #d1d5db; text-align: left;">Structure</th>
+          <th style="padding: 8px; border: 1px solid #d1d5db; text-align: left;">Finish</th>
+          <th style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">Dimensions (ft)</th>
+          <th style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">Rate (₹)</th>
+          <th style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">Amount (₹)</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  products.forEach(product => {
+    const dimensions = `${product.length || 0} × ${product.width || 0}`;
+    tableHTML += `
+      <tr>
+        <td style="padding: 8px; border: 1px solid #d1d5db;">${product.product || 'Custom'}</td>
+        <td style="padding: 8px; border: 1px solid #d1d5db;">${product.structure}</td>
+        <td style="padding: 8px; border: 1px solid #d1d5db;">${product.finish}</td>
+        <td style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">${dimensions}</td>
+        <td style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">${product.rate || 0}</td>
+        <td style="padding: 8px; border: 1px solid #d1d5db; text-align: right;">${calculateAmount(product)}</td>
+      </tr>
+    `;
+  });
+
+  const subtotal = products.reduce((sum, p) => sum + parseFloat(calculateAmount(p)), 0);
+  tableHTML += `
+      </tbody>
+    </table>
+    <div style="text-align: right; margin: 20px 0;">
+      <p style="font-size: 14px;"><strong>Subtotal:</strong> ₹${subtotal.toFixed(2)}</p>
+      <p style="font-size: 16px; font-weight: bold;"><strong>Total:</strong> ₹${subtotal.toFixed(2)}</p>
+    </div>
+  `;
+
+  element.innerHTML += tableHTML;
+
+  // Page break here for second page
+  element.innerHTML += `<div style="page-break-after: always;"></div>`;
+
+  element.innerHTML += `
+
+
+  <div style="background-color: #f8fafc; padding: 10px; border-radius: 5px; margin: 15px 0; font-size: 13px;">
+      <p style="margin: 5px 0; color: #FD9800;"><strong>Client Benefits & Assurance:</strong></p>
+      <p style="margin: 5px 0;">🌟 Rated 4.9★ <a href="https://www.google.com/maps/place/Creative+Design+Studios" target="_blank">4.9★ on Google</a> – Trusted by Clients in Thanjavur</p>
+      <p style="margin: 5px 0;">📷 Follow Us: 
+        <span style="color: #FD9800;"><a href="https://www.instagram.com/creative_design_studios_offl/" target="_blank">Instagram</a></span> | 
+        <span style="color: #FF0000;"><a href="https://www.youtube.com/@CreativeDesignStudios" target="_blank">YouTube</a></span>
+      </p>
+    </div>
+    <div style="margin: 25px 0; font-size: 11px;">
+      <h3 style="color: #FD9800; border-bottom: 1px solid #eee; padding-bottom: 5px;">Terms & Conditions</h3>
+      <ol style="padding-left: 15px; margin-top: 8px;">
+        <li style="margin-bottom: 5px;">Completion Period: 20 to 30 days for above mentioned work</li>
+        <li style="margin-bottom: 5px;">Any work executed other than mentioned in the above, Quotation will be considered extra</li>
+        <li style="margin-bottom: 5px;">Completion period, subject to the below mentioned payment terms</li>
+        <li style="margin-bottom: 5px;">Shutter CNC, Gas copper Pipe line works if any, extra</li>
+        <li style="margin-bottom: 5px;">Demolishing, Appliances, civil and plumbing works if any, extra</li>
+        <li style="margin-bottom: 5px;">Wall tiles and fixing works if any, extra</li>
+        <li style="margin-bottom: 5px;">Color themes are subject to availability</li>
+        <li style="margin-bottom: 5px;">Transport charges are extra</li>
+        <li style="margin-bottom: 5px;">Work will be commenced after payment realization</li>
+        <li style="margin-bottom: 5px;">If any materials are not available in market, same equal branded material will be used</li>
+      </ol>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin: 25px 0; font-size: 11px;">
+      <div style="width: 48%;">
+        <h3 style="color: #FD9800; border-bottom: 1px solid #eee; padding-bottom: 5px;">Payment Terms</h3>
+        <ul style="padding-left: 15px; margin-top: 8px;">
+          <li style="margin-bottom: 5px;">Rs.50% - Advance on confirmation</li>
+          <li style="margin-bottom: 5px;">Rs.40% - on work processing of material</li>
+          <li style="margin-bottom: 5px;">Rs.10% - After Completion</li>
+        </ul>
+      </div>
+
+      <div style="width: 48%;">
+        <h3 style="color: #6b7280; border-bottom: 1px solid #eee; padding-bottom: 5px;">Note</h3>
+        <ul style="padding-left: 15px; margin-top: 8px;">
+          <li style="margin-bottom: 5px; font-size: 10px; color: #6b7280;">This estimate is valid for 15 days from the date of issuance</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top: 40px; text-align: center; color: #6b7280; font-size: 11px; border-top: 1px solid #eee; padding-top: 15px;">
+      <p>Thank you for choosing Creative Design Studios!</p>
+    </div>
+
+    <div style="text-align: right; margin-top: 20px; font-size: 10px; color: #999;">
+      <p>Generated on ${new Date().toLocaleString()}</p>
+    </div>
+  `;
+
+  const opt = {
+    margin: 10,
+    filename: `Interior_Estimate_${clientName.replace(/\s+/g, '_') || 'Customer'}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, logging: true, useCORS: true },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', hotfixes: ["px_scaling"] }
+  };
+
+  html2pdf().set(opt).from(element).save();
+}
+
+
+   // Set today's date automatically in the date input field
     const dateInput = document.getElementById("dateInput");
     if (dateInput) {
       const today = new Date().toISOString().split("T")[0];
       dateInput.value = today;
     }
 
-    // Initial fetch of estimations (if needed)
-    fetchProducts();
-  </script>
+
+</script>
+
+
 </body>
 </html>
