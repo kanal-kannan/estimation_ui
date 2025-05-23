@@ -161,15 +161,15 @@
     // Initialize products array with localStorage data if available
     localStorage.removeItem('savedProducts');
     let PRODUCTS =  [
-      { name: "Wardrobe", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminate", "Acrylic"] },
-      { name: "Loft", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminatete", "Acrylic"] },
-      { name: "Kitchen Kadapa Shelf", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminatete", "Acrylic"] },
-      { name: "Modular Kitchen", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminate", "Acrylic"] },
-      { name: "Kitchen Wall Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminate", "Acrylic"] },
-      { name: "Crockery Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminate", "Acrylic"] },
-      { name: "Pooja Box", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminate", "Acrylic"] },
-      { name: "TV Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminate", "Acrylic"] },
-      { name: "Panelling Work", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminate", "Acrylic"] }
+      { name: "Wardrobe", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminate","Archilam / Advance -Laminate", "Acrylic"] },
+      { name: "Loft", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminatete","Archilam / Advance -Laminate", "Acrylic"] },
+      { name: "Kitchen Kadappa / Shelf / Pooja -Door Only", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminatete","Archilam / Advance -Laminate", "Acrylic"] },
+      { name: "Modular Kitchen Bottom unit", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminate","Archilam / Advance -Laminate", "Acrylic"] },
+      { name: "Kitchen Wall Unit", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminate","Archilam / Advance -Laminate", "Acrylic"] },
+      { name: "Crockery Unit", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminate","Archilam / Advance -Laminate", "Acrylic"] },
+      { name: "Pooja Box", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminate","Archilam / Advance -Laminate", "Acrylic"] },
+      { name: "TV Unit", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminate","Archilam / Advance -Laminate", "Acrylic"] },
+      { name: "Panelling Work", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminate","Archilam / Advance -Laminate", "Acrylic"] }
     ];
 
     let products = [];
@@ -202,7 +202,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const id = nextId++;
       // Check if we have a saved rate for this product type
           const defaultProduct = "Wardrobe";
-const defaultStructure = "MR-Commercial Plywood";
+const defaultStructure = "Prelaminate";
 const defaultFinish = "Prelam";
 const rateKey = `${defaultProduct}-${defaultStructure}-${defaultFinish}`;
 const defaultRate = savedRates[rateKey] || "1000";
@@ -211,8 +211,8 @@ const defaultRate = savedRates[rateKey] || "1000";
       products.push({
         id,
         product: "Wardrobe",
-        structure: "MR-Commercial Plywood",
-        finish: "Prelam",
+        structure: "Prelaminate",
+        finish: "Prelaminate",
         length: "",
         breadth: "",
         rate: defaultRate,
@@ -330,7 +330,6 @@ function renderProduct(id) {
 
   row.innerHTML = `
 
-  <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-8 text-center items-center p-3 border rounded shadow-sm bg-white">
 
   <!-- Product -->
   <div class="flex flex-col">
@@ -630,7 +629,9 @@ function updateDimension(id, field, value) {
 `;
 
 products.forEach(product => {
-  const description = `MR-${product.structure} wardrobe with ${product.finish} finish`;
+  const description = `
+    <strong>${product.product}</strong> - structure with <strong>${product.structure}</strong> - with <strong>${product.finish}</strong> Finish
+  `;
   tableHTML += `
     <tr>
       <td style="padding: 8px; border: 1px solid #d1d5db;">${description}</td>
