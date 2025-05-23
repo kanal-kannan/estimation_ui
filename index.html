@@ -103,6 +103,7 @@
   <div>Breadth (ft)</div>
   <div>Rate (₹)</div>
   <div>Amount (₹)</div>
+  <div>Action</div>
 </div>
 
 <!-- Product container -->
@@ -358,7 +359,10 @@ function renderProduct(id) {
       Remove
     </button>
   `;
-  row.className = "grid grid-cols-8 gap-2 text-center items-center";
+row.className = `
+  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-8 gap-4 
+  text-center items-center border p-2 rounded bg-white shadow-sm
+`;
 
 
   productContainer.appendChild(row);
