@@ -66,7 +66,7 @@
     </div>
   </div>
 
-  <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+  <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
     <!-- Header -->
     <div class="bg-blue-600 text-white p-4 sm:p-6">
       <div class="flex justify-between items-center">
@@ -94,21 +94,20 @@
           <input type="date" id="dateInput" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base">
         </div>
       </div>
+<!-- Header -->
+<div id="productHeader" class="hidden md:grid grid-cols-8 gap-2 mb-2 text-xs sm:text-sm font-medium text-gray-700 text-center">
+  <div>Product</div>
+  <div>Structure</div>
+  <div>Finish</div>
+  <div>Length (ft)</div>
+  <div>Breadth (ft)</div>
+  <div>Rate (₹)</div>
+  <div>Amount (₹)</div>
+</div>
 
-      <!-- Products Table Header -->
-      <div id="productHeader" class="hidden md:grid product-row gap-2 mb-2 text-xs sm:text-sm font-medium text-gray-700">
-        <div>Product</div>
-        <div>Structure</div>
-        <div>Finish</div>
-        <div>Length (ft)</div>
-        <div>breadth (ft)</div>
-        <div>Rate (₹)</div>
-        <div>Amount (₹)</div>
-        <div></div>
-      </div>
+<!-- Product container -->
+<div id="productContainer" class="hidden space-y-2 sm:space-y-3 md:space-y-4 mb-4 sm:mb-6"></div>
 
-      <!-- Products Container -->
-      <div id="productContainer" class="hidden space-y-2 sm:space-y-3 md:space-y-4 mb-4 sm:mb-6"></div>
 
 <!-- Rate Edit Modal -->
 <div id="rateModal" class="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center hidden z-50">
@@ -159,16 +158,17 @@
 
   <script>
     // Initialize products array with localStorage data if available
-    let PRODUCTS = JSON.parse(localStorage.getItem('savedProducts')) || [
-      { name: "Wardrobe", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-      { name: "Loft", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-      { name: "Kitchen Kadapa Shelf", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-      { name: "Modular Kitchen", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-      { name: "Kitchen Wall Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-      { name: "Crockery Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-      { name: "Pooja Box", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-      { name: "TV Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] },
-      { name: "Panelling Work", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Lamina", "Acrylic"] }
+    localStorage.removeItem('savedProducts');
+    let PRODUCTS =  [
+      { name: "Wardrobe", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminate", "Acrylic"] },
+      { name: "Loft", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminatete", "Acrylic"] },
+      { name: "Kitchen Kadapa Shelf", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminatete", "Acrylic"] },
+      { name: "Modular Kitchen", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminate", "Acrylic"] },
+      { name: "Kitchen Wall Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminate", "Acrylic"] },
+      { name: "Crockery Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminate", "Acrylic"] },
+      { name: "Pooja Box", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminate", "Acrylic"] },
+      { name: "TV Unit", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminate", "Acrylic"] },
+      { name: "Panelling Work", structure: ["MR-Commercial Plywood", "BWR Plywood", "BWP Plywood", "BWR/BWP Plywood", "MDF Panel", "HMR Panel", "HDHMR Panel"], finish: ["Prelam", "Laminate", "Acrylic"] }
     ];
 
     let products = [];
@@ -180,8 +180,14 @@
     const subtotalEl = document.getElementById("subtotal");
     const totalEl = document.getElementById("total");
 
+window.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("productHeader").classList.add("hidden");
+  document.getElementById("productContainer").classList.add("hidden");
+});
+
+
     document.addEventListener("DOMContentLoaded", () => {
-      addProduct();
+      // addProduct();
       // Set today's date automatically in the date input field
       const dateInput = document.getElementById("dateInput");
       if (dateInput) {
@@ -194,7 +200,12 @@
       showHeaderIfHidden();
       const id = nextId++;
       // Check if we have a saved rate for this product type
-      const defaultRate = savedRates["Wardrobe-MR-Commercial Plywood-Prelam"] || "";
+          const defaultProduct = "Wardrobe";
+const defaultStructure = "MR-Commercial Plywood";
+const defaultFinish = "Prelam";
+const rateKey = `${defaultProduct}-${defaultStructure}-${defaultFinish}`;
+const defaultRate = savedRates[rateKey] || "1000";
+
       
       products.push({
         id,
@@ -280,10 +291,20 @@
       updateTotals();
     }
 
-    function showHeaderIfHidden() {
-      productHeader.classList.remove("hidden");
-      productContainer.classList.remove("hidden");
-    }
+   function showHeaderIfHidden() {
+  const header = document.getElementById("productHeader");
+  const container = document.getElementById("productContainer");
+
+  if (header.classList.contains("hidden")) {
+    header.classList.remove("hidden");
+  }
+
+  if (container.classList.contains("hidden")) {
+    container.classList.remove("hidden");
+  }
+}
+
+
 
    let currentRateEditId = null;
 
@@ -307,37 +328,37 @@ function renderProduct(id) {
   ).join('');
 
   row.innerHTML = `
-    <select onchange="updateProduct(${id}, 'product', this.value)" class="p-2 border rounded">
-      ${productOptions}
-    </select>
-    <select onchange="updateProduct(${id}, 'structure', this.value)" class="p-2 border rounded">
-      ${structureOptions}
-    </select>
-    <select onchange="updateProduct(${id}, 'finish', this.value)" class="p-2 border rounded">
-      ${finishOptions}
-    </select>
-    <input type="number" min="0" step="0.1" value="${product.length}" 
-           oninput="updateDimension(${id}, 'length', this.value)" class="p-2 border rounded" placeholder="Length">
-    <input type="number" min="0" step="0.1" value="${product.breadth}" 
-           oninput="updateDimension(${id}, 'breadth', this.value)" class="p-2 border rounded" placeholder="breadth">
-   <div class="flex items-center gap-2">
-  <span>₹${product.rate}</span>
-  <button onclick="openRateModal(${id})" class="text-blue-500 hover:text-blue-700">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-        d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3zM3 21h18" />
-    </svg>
-  </button>
+  <select onchange="updateProduct(${id}, 'product', this.value)" class="p-2 border rounded w-full">
+    ${productOptions}
+  </select>
+  <select onchange="updateProduct(${id}, 'structure', this.value)" class="p-2 border rounded w-full">
+    ${structureOptions}
+  </select>
+  <select onchange="updateProduct(${id}, 'finish', this.value)" class="p-2 border rounded w-full">
+    ${finishOptions}
+  </select>
+  <input type="number" min="0" step="0.1" value="${product.length}" 
+         oninput="updateDimension(${id}, 'length', this.value)" class="p-2 border rounded w-full" placeholder="Length">
+  <input type="number" min="0" step="0.1" value="${product.breadth}" 
+         oninput="updateDimension(${id}, 'breadth', this.value)" class="p-2 border rounded w-full" placeholder="Breadth">
+  <div class="flex justify-center items-center gap-2">
+    <span>₹${product.rate}</span>
+    <button onclick="openRateModal(${id})" class="text-blue-500 hover:text-blue-700">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3zM3 21h18" />
+      </svg>
+    </button>
 </div>
 
     <input type="text" readonly value="${calculateAmount(product)}" 
            class="p-2 border rounded bg-gray-100">
     <button onclick="removeProduct(${id})" class="text-red-500 hover:text-red-700 p-1">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-      </svg>
+      Remove
     </button>
   `;
+  row.className = "grid grid-cols-8 gap-2 text-center items-center";
+
 
   productContainer.appendChild(row);
 }
@@ -623,5 +644,7 @@ element.innerHTML += tableHTML;
 }
 
   </script>
+
+  
 </body>
 </html>
