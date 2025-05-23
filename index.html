@@ -330,34 +330,78 @@ function renderProduct(id) {
 
   row.innerHTML = `
 
-  <select onchange="updateProduct(${id}, 'product', this.value)" class="p-2 border rounded w-full">
-    ${productOptions}
-  </select>
-  <select onchange="updateProduct(${id}, 'structure', this.value)" class="p-2 border rounded w-full">
-    ${structureOptions}
-  </select>
-  <select onchange="updateProduct(${id}, 'finish', this.value)" class="p-2 border rounded w-full">
-    ${finishOptions}
-  </select>
-  <input type="number" min="0" step="0.1" value="${product.length}" 
-         oninput="updateDimension(${id}, 'length', this.value)" class="p-2 border rounded w-full" placeholder="Length">
-  <input type="number" min="0" step="0.1" value="${product.breadth}" 
-         oninput="updateDimension(${id}, 'breadth', this.value)" class="p-2 border rounded w-full" placeholder="Breadth">
-  <div class="flex justify-center items-center gap-2">
-    <span>₹${product.rate}</span>
-    <button onclick="openRateModal(${id})" class="text-blue-500 hover:text-blue-700">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3zM3 21h18" />
-      </svg>
-    </button>
-</div>
+  <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-8 text-center items-center p-3 border rounded shadow-sm bg-white">
 
-    <input type="text" readonly value="${calculateAmount(product)}" 
-           class="p-2 border rounded bg-gray-100">
-    <button onclick="removeProduct(${id})" class="text-red-500 hover:text-red-700 p-1">
+  <!-- Product -->
+  <div class="flex flex-col">
+    <label class="text-left text-xs text-gray-500 md:hidden">Product</label>
+    <select onchange="updateProduct(${id}, 'product', this.value)" class="p-2 border rounded w-full">
+      ${productOptions}
+    </select>
+  </div>
+
+  <!-- Structure -->
+  <div class="flex flex-col">
+    <label class="text-left text-xs text-gray-500 md:hidden">Structure</label>
+    <select onchange="updateProduct(${id}, 'structure', this.value)" class="p-2 border rounded w-full">
+      ${structureOptions}
+    </select>
+  </div>
+
+  <!-- Finish -->
+  <div class="flex flex-col">
+    <label class="text-left text-xs text-gray-500 md:hidden">Finish</label>
+    <select onchange="updateProduct(${id}, 'finish', this.value)" class="p-2 border rounded w-full">
+      ${finishOptions}
+    </select>
+  </div>
+
+  <!-- Length -->
+  <div class="flex flex-col">
+    <label class="text-left text-xs text-gray-500 md:hidden">Length (ft)</label>
+    <input type="number" min="0" step="0.1" value="${product.length}"
+           oninput="updateDimension(${id}, 'length', this.value)"
+           class="p-2 border rounded w-full" placeholder="Length">
+  </div>
+
+  <!-- Breadth -->
+  <div class="flex flex-col">
+    <label class="text-left text-xs text-gray-500 md:hidden">Breadth (ft)</label>
+    <input type="number" min="0" step="0.1" value="${product.breadth}"
+           oninput="updateDimension(${id}, 'breadth', this.value)"
+           class="p-2 border rounded w-full" placeholder="Breadth">
+  </div>
+
+  <!-- Rate -->
+  <div class="flex flex-col">
+    <label class="text-left text-xs text-gray-500 md:hidden">Rate (₹)</label>
+    <div class="flex justify-center items-center gap-2">
+      <span>₹${product.rate}</span>
+      <button onclick="openRateModal(${id})" class="text-blue-500 hover:text-blue-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3zM3 21h18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Amount -->
+  <div class="flex flex-col">
+    <label class="text-left text-xs text-gray-500 md:hidden">Amount (₹)</label>
+    <input type="text" readonly value="${calculateAmount(product)}"
+           class="p-2 border rounded bg-gray-100 w-full">
+  </div>
+
+  <!-- Remove Button -->
+  <div class="flex flex-col">
+    <label class="text-left text-xs text-gray-500 md:hidden">Action</label>
+    <button onclick="removeProduct(${id})" class="text-red-500 hover:text-red-700 p-2 border rounded">
       Remove
     </button>
+  </div>
+</div>
   `;
 row.className = `
   grid grid-cols-1 sm:grid-cols-2 md:grid-cols-8 gap-4 
