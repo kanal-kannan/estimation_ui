@@ -172,253 +172,226 @@
       { name: "Panelling Work", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminate","Archilam / Advance -Laminate", "Acrylic"] }
     ];
 
+
+const FIXED_RATES = {
+  // Wardrobe rates
+  "Wardrobe-Prelaminate": 1065,
+  "Wardrobe-HDHMR": 1150,
+  "Wardrobe-ISO - BWR/BWP": 1350,
+  "Wardrobe-Century / Sharon BWP/BWR": 1650,
+  
+  // Loft rates
+  "Loft-Prelaminate": 800,
+  "Loft-HDHMR": 890,
+  "Loft-ISO - BWR/BWP": 1050,
+  "Loft-Century / Sharon BWP/BWR": 1400,
+  
+  // Kitchen Kadappa rates
+  "Kitchen Kadappa / Shelf / Pooja -Door Only-Prelaminate": 800,
+  "Kitchen Kadappa / Shelf / Pooja -Door Only-HDHMR": 890,
+  "Kitchen Kadappa / Shelf / Pooja -Door Only-ISO - BWR/BWP": 1050,
+  "Kitchen Kadappa / Shelf / Pooja -Door Only-Century / Sharon BWP/BWR": 1400,
+  
+  // Modular Kitchen Bottom unit rates
+  "Modular Kitchen Bottom unit-Prelaminate": 1065,
+  "Modular Kitchen Bottom unit-HDHMR": 1150,
+  "Modular Kitchen Bottom unit-ISO - BWR/BWP": 1350,
+  "Modular Kitchen Bottom unit-Century / Sharon BWP/BWR": 1650,
+  
+  // Kitchen Wall Unit rates
+  "Kitchen Wall Unit-Prelaminate": 1050,
+  "Kitchen Wall Unit-HDHMR": 1125,
+  "Kitchen Wall Unit-ISO - BWR/BWP": 1300,
+  "Kitchen Wall Unit-Century / Sharon BWP/BWR": 1600,
+  
+  // Crockery Unit rates
+  "Crockery Unit-Prelaminate": 1065,
+  "Crockery Unit-HDHMR": 1150,
+  "Crockery Unit-ISO - BWR/BWP": 1350,
+  "Crockery Unit-Century / Sharon BWP/BWR": 1650,
+  
+  // Pooja unit rates
+  "Pooja Box-Prelaminate": 1065,
+  "Pooja Box-HDHMR": 1150,
+  "Pooja Box-ISO - BWR/BWP": 1350,
+  "Pooja Box-Century / Sharon BWP/BWR": 1650,
+  
+  // TV Unit rates
+  "TV Unit-Prelaminate": 1000,
+  "TV Unit-HDHMR": 1050,
+  "TV Unit-ISO - BWR/BWP": 1200,
+  "TV Unit-Century / Sharon BWP/BWR": 1500,
+  
+  // Panelling Work rates
+  "Panelling Work-Prelaminate": 700,
+  "Panelling Work-HDHMR": 850,
+  "Panelling Work-ISO - BWR/BWP": 1000,
+  "Panelling Work-Century / Sharon BWP/BWR": 1300
+};
+
+
     let products = [];
-    let nextId = 0;
-    let savedRates = JSON.parse(localStorage.getItem('savedRates')) || {};
+let nextId = 0;
+let savedRates = JSON.parse(localStorage.getItem('savedRates')) || {};
 
-    const productContainer = document.getElementById("productContainer");
-    const productHeader = document.getElementById("productHeader");
-    const subtotalEl = document.getElementById("subtotal");
-    const totalEl = document.getElementById("total");
+// DOM elements
+const productContainer = document.getElementById("productContainer");
+const productHeader = document.getElementById("productHeader");
+const subtotalEl = document.getElementById("subtotal");
+const totalEl = document.getElementById("total");
 
+// Initialize with hidden containers
 window.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("productHeader").classList.add("hidden");
-  document.getElementById("productContainer").classList.add("hidden");
+  productHeader.classList.add("hidden");
+  productContainer.classList.add("hidden");
+  
+  // Set today's date
+  const dateInput = document.getElementById("dateInput");
+  if (dateInput) {
+    dateInput.value = new Date().toISOString().split("T")[0];
+  }
 });
 
+// Add new product with proper rate handling
+function addProduct() {
+  showHeaderIfHidden();
+  const id = nextId++;
+  const defaultProduct = "Wardrobe";
+  const defaultStructure = "Prelaminate";
+  const defaultFinish = "Prelaminate";
+  
+  // Get fixed rate for this combination
+  const rateKey = `${defaultProduct}-${defaultStructure}`;
+  const defaultRate = FIXED_RATES[rateKey] || 1000;
 
-    document.addEventListener("DOMContentLoaded", () => {
-      // addProduct();
-      // Set today's date automatically in the date input field
-      const dateInput = document.getElementById("dateInput");
-      if (dateInput) {
-        const today = new Date().toISOString().split("T")[0];
-        dateInput.value = today;
-      }
-    });
+  products.push({
+    id,
+    product: defaultProduct,
+    structure: defaultStructure,
+    finish: defaultFinish,
+    length: "",
+    breadth: "",
+    rate: defaultRate,
+    custom: false
+  });
+  renderProduct(id);
+  updateTotals();
+}
 
-    function addProduct() {
-      showHeaderIfHidden();
-      const id = nextId++;
-      // Check if we have a saved rate for this product type
-          const defaultProduct = "Wardrobe";
-const defaultStructure = "Prelaminate";
-const defaultFinish = "Prelam";
-const rateKey = `${defaultProduct}-${defaultStructure}-${defaultFinish}`;
-const defaultRate = savedRates[rateKey] || "1000";
-
-      
-      products.push({
-        id,
-        product: "Wardrobe",
-        structure: "Prelaminate",
-        finish: "Prelaminate",
-        length: "",
-        breadth: "",
-        rate: defaultRate,
-        custom: false
-      });
-      renderProduct(id);
-      updateTotals();
-    }
-
-    function openCustomProductModal() {
-      const modal = document.getElementById("customProductModal");
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
-
-      // Populate structure/finish from default
-      const structureSelect = document.getElementById("customStructure");
-      const finishSelect = document.getElementById("customFinish");
-      structureSelect.innerHTML = PRODUCTS[0].structure.map(s => `<option>${s}</option>`).join('');
-      finishSelect.innerHTML = PRODUCTS[0].finish.map(f => `<option>${f}</option>`).join('');
-    }
-
-    function closeCustomProductModal() {
-      const modal = document.getElementById("customProductModal");
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-
-      document.getElementById("customProductName").value = '';
-      document.getElementById("customRate").value = '';
-    }
-
-    function saveCustomProduct() {
-      const productName = document.getElementById("customProductName").value.trim();
-      const structure = document.getElementById("customStructure").value;
-      const finish = document.getElementById("customFinish").value;
-      const rate = parseFloat(document.getElementById("customRate").value);
-
-      if (!productName || isNaN(rate)) {
-        alert("Please enter valid product name and rate.");
-        return;
-      }
-
-      // Check if product already exists
-      const existingProduct = PRODUCTS.find(p => p.name.toLowerCase() === productName.toLowerCase());
-      
-      if (!existingProduct) {
-        // Add new product to PRODUCTS array
-        PRODUCTS.push({
-          name: productName,
-          structure: PRODUCTS[0].structure, // Use default structures
-          finish: PRODUCTS[0].finish // Use default finishes
-        });
-        // Save to localStorage
-        localStorage.setItem('savedProducts', JSON.stringify(PRODUCTS));
-      }
-
-      // Save the rate for this product type
-      const rateKey = `${productName}-${structure}-${finish}`;
-      savedRates[rateKey] = rate;
-      localStorage.setItem('savedRates', JSON.stringify(savedRates));
-
-      // Add the product to the list (not as custom)
-      const id = nextId++;
-      products.push({
-        id,
-        product: productName,
-        structure,
-        finish,
-        length: "",
-        breadth: "",
-        rate,
-        custom: false
-      });
-
-      closeCustomProductModal();
-      showHeaderIfHidden();
-      renderProduct(id);
-      updateTotals();
-    }
-
-   function showHeaderIfHidden() {
-  const header = document.getElementById("productHeader");
-  const container = document.getElementById("productContainer");
-
-  if (header.classList.contains("hidden")) {
-    header.classList.remove("hidden");
+// Show header and container when adding first product
+function showHeaderIfHidden() {
+  if (productHeader.classList.contains("hidden")) {
+    productHeader.classList.remove("hidden");
   }
-
-  if (container.classList.contains("hidden")) {
-    container.classList.remove("hidden");
+  if (productContainer.classList.contains("hidden")) {
+    productContainer.classList.remove("hidden");
   }
 }
 
-
-
-   let currentRateEditId = null;
-
+// Render product row with proper rate handling
 function renderProduct(id) {
   const product = products.find(p => p.id === id);
   if (!product) return;
 
   const row = document.createElement("div");
-  row.className = "product-row grid gap-2 items-center p-2 border rounded-lg";
+  row.className = "product-row grid grid-cols-1 sm:grid-cols-2 md:grid-cols-8 gap-4 text-center items-center border p-2 rounded bg-white shadow-sm";
   row.id = `product-${id}`;
 
   const productOptions = PRODUCTS.map(p =>
     `<option value="${p.name}" ${p.name === product.product ? 'selected' : ''}>${p.name}</option>`
   ).join('');
+  
   const selectedProduct = PRODUCTS.find(p => p.name === product.product) || PRODUCTS[0];
   const structureOptions = selectedProduct.structure.map(g =>
     `<option ${g === product.structure ? 'selected' : ''}>${g}</option>`
   ).join('');
+  
   const finishOptions = selectedProduct.finish.map(m =>
     `<option ${m === product.finish ? 'selected' : ''}>${m}</option>`
   ).join('');
 
   row.innerHTML = `
+    <!-- Product -->
+    <div class="flex flex-col">
+      <label class="text-left text-xs text-gray-500 md:hidden">Product</label>
+      <select onchange="updateProduct(${id}, 'product', this.value)" class="p-2 border rounded w-full">
+        ${productOptions}
+      </select>
+    </div>
 
+    <!-- Structure -->
+    <div class="flex flex-col">
+      <label class="text-left text-xs text-gray-500 md:hidden">Structure</label>
+      <select onchange="updateProduct(${id}, 'structure', this.value)" class="p-2 border rounded w-full">
+        ${structureOptions}
+      </select>
+    </div>
 
-  <!-- Product -->
-  <div class="flex flex-col">
-    <label class="text-left text-xs text-gray-500 md:hidden">Product</label>
-    <select onchange="updateProduct(${id}, 'product', this.value)" class="p-2 border rounded w-full">
-      ${productOptions}
-    </select>
-  </div>
+    <!-- Finish -->
+    <div class="flex flex-col">
+      <label class="text-left text-xs text-gray-500 md:hidden">Finish</label>
+      <select onchange="updateProduct(${id}, 'finish', this.value)" class="p-2 border rounded w-full">
+        ${finishOptions}
+      </select>
+    </div>
 
-  <!-- Structure -->
-  <div class="flex flex-col">
-    <label class="text-left text-xs text-gray-500 md:hidden">Structure</label>
-    <select onchange="updateProduct(${id}, 'structure', this.value)" class="p-2 border rounded w-full">
-      ${structureOptions}
-    </select>
-  </div>
+    <!-- Dimensions -->
+    <div class="flex flex-col">
+      <label class="text-left text-xs text-gray-500 md:hidden">Length (ft)</label>
+      <input type="number" min="0" step="0.1" value="${product.length}"
+             oninput="updateDimension(${id}, 'length', this.value)"
+             class="p-2 border rounded w-full" placeholder="Length">
+    </div>
 
-  <!-- Finish -->
-  <div class="flex flex-col">
-    <label class="text-left text-xs text-gray-500 md:hidden">Finish</label>
-    <select onchange="updateProduct(${id}, 'finish', this.value)" class="p-2 border rounded w-full">
-      ${finishOptions}
-    </select>
-  </div>
+    <div class="flex flex-col">
+      <label class="text-left text-xs text-gray-500 md:hidden">Breadth (ft)</label>
+      <input type="number" min="0" step="0.1" value="${product.breadth}"
+             oninput="updateDimension(${id}, 'breadth', this.value)"
+             class="p-2 border rounded w-full" placeholder="Breadth">
+    </div>
 
-  <!-- Length -->
-  <div class="flex flex-col">
-    <label class="text-left text-xs text-gray-500 md:hidden">Length (ft)</label>
-    <input type="number" min="0" step="0.1" value="${product.length}"
-           oninput="updateDimension(${id}, 'length', this.value)"
-           class="p-2 border rounded w-full" placeholder="Length">
-  </div>
+    <!-- Rate with edit button -->
+    <div class="flex flex-col">
+      <label class="text-left text-xs text-gray-500 md:hidden">Rate (₹)</label>
+      <div class="flex justify-center items-center gap-2">
+        <span>₹${product.rate}</span>
+        <button onclick="openRateModal(${id})" class="text-blue-500 hover:text-blue-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3zM3 21h18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
 
-  <!-- Breadth -->
-  <div class="flex flex-col">
-    <label class="text-left text-xs text-gray-500 md:hidden">Breadth (ft)</label>
-    <input type="number" min="0" step="0.1" value="${product.breadth}"
-           oninput="updateDimension(${id}, 'breadth', this.value)"
-           class="p-2 border rounded w-full" placeholder="Breadth">
-  </div>
+    <!-- Amount -->
+    <div class="flex flex-col">
+      <label class="text-left text-xs text-gray-500 md:hidden">Amount (₹)</label>
+      <input type="text" readonly value="${calculateAmount(product)}"
+             class="p-2 border rounded bg-gray-100 w-full">
+    </div>
 
-  <!-- Rate -->
-  <div class="flex flex-col">
-    <label class="text-left text-xs text-gray-500 md:hidden">Rate (₹)</label>
-    <div class="flex justify-center items-center gap-2">
-      <span>₹${product.rate}</span>
-      <button onclick="openRateModal(${id})" class="text-blue-500 hover:text-blue-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
-             viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3zM3 21h18"/>
-        </svg>
+    <!-- Remove Button -->
+    <div class="flex flex-col">
+      <label class="text-left text-xs text-gray-500 md:hidden">Action</label>
+      <button onclick="removeProduct(${id})" class="text-red-500 hover:text-red-700 p-2 border rounded">
+        Remove
       </button>
     </div>
-  </div>
-
-  <!-- Amount -->
-  <div class="flex flex-col">
-    <label class="text-left text-xs text-gray-500 md:hidden">Amount (₹)</label>
-    <input type="text" readonly value="${calculateAmount(product)}"
-           class="p-2 border rounded bg-gray-100 w-full">
-  </div>
-
-  <!-- Remove Button -->
-  <div class="flex flex-col">
-    <label class="text-left text-xs text-gray-500 md:hidden">Action</label>
-    <button onclick="removeProduct(${id})" class="text-red-500 hover:text-red-700 p-2 border rounded">
-      Remove
-    </button>
-  </div>
-</div>
   `;
-row.className = `
-  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-8 gap-4 
-  text-center items-center border p-2 rounded bg-white shadow-sm
-`;
-
 
   productContainer.appendChild(row);
 }
 
+// Rate modal functions
+let currentRateEditId = null;
 
-    function openRateModal(id) {
+function openRateModal(id) {
   const product = products.find(p => p.id === id);
-  if (!product) return;
-
-  currentRateEditId = id;
-  document.getElementById("rateInput").value = product.rate;
-  document.getElementById("rateModal").classList.remove("hidden");
+  if (product) {
+    currentRateEditId = id;
+    document.getElementById("rateInput").value = product.rate;
+    document.getElementById("rateModal").classList.remove("hidden");
+  }
 }
 
 function closeRateModal() {
@@ -430,24 +403,70 @@ function saveRate() {
   const newRate = parseFloat(document.getElementById("rateInput").value) || 0;
   if (currentRateEditId !== null) {
     const product = products.find(p => p.id === currentRateEditId);
-    product.rate = newRate;
-
-    const row = document.getElementById(`product-${product.id}`);
-    if (row) row.remove();
-
-    renderProduct(product.id);
-    updateTotals();
+    if (product) {
+      // Save rate for this product configuration
+      const rateKey = `${product.product}-${product.structure}-${product.finish}`;
+      savedRates[rateKey] = newRate;
+      localStorage.setItem('savedRates', JSON.stringify(savedRates));
+      
+      // Update product and UI
+      product.rate = newRate;
+      const row = document.getElementById(`product-${product.id}`);
+      if (row) row.remove();
+      renderProduct(product.id);
+      updateTotals();
+    }
   }
   closeRateModal();
 }
 
-function updateDimension(id, field, value) {
+// Update product details with rate preservation
+function updateProduct(id, property, value) {
   const product = products.find(p => p.id === id);
   if (!product) return;
 
-  product[field] = parseFloat(value) || 0;
+  product[property] = value;
 
-  // Update the amount live
+  // If product type changes, reset structure and finish
+  if (property === 'product') {
+    const selectedProduct = PRODUCTS.find(p => p.name === value);
+    if (selectedProduct) {
+      product.structure = selectedProduct.structure[0];
+      product.finish = selectedProduct.finish[0];
+    }
+  }
+
+  // Apply fixed rate based on product and structure
+  const rateKey = `${product.product}-${product.structure}`;
+  if (FIXED_RATES[rateKey]) {
+    product.rate = FIXED_RATES[rateKey];
+  }
+
+  // Re-render the row
+  const row = document.getElementById(`product-${id}`);
+  if (row) row.remove();
+  renderProduct(id);
+  updateTotals();
+}
+
+// Helper functions
+function calculateAmount(product) {
+  const area = (parseFloat(product.length) || 0) * (parseFloat(product.breadth) || 0);
+  return (area * (parseFloat(product.rate) || 0)).toFixed(2);
+}
+
+function updateDimension(id, field, value) {
+  const product = products.find(p => p.id === id);
+  if (product) {
+    product[field] = parseFloat(value) || 0;
+    updateAmount(id);
+  }
+}
+
+function updateAmount(id) {
+  const product = products.find(p => p.id === id);
+  if (!product) return;
+
   const row = document.getElementById(`product-${id}`);
   if (row) {
     const amountInput = row.querySelector('input[readonly]');
@@ -455,88 +474,26 @@ function updateDimension(id, field, value) {
       amountInput.value = calculateAmount(product);
     }
   }
-
   updateTotals();
 }
 
+function removeProduct(id) {
+  products = products.filter(p => p.id !== id);
+  const row = document.getElementById(`product-${id}`);
+  if (row) row.remove();
+  
+  if (products.length === 0) {
+    productHeader.classList.add("hidden");
+    productContainer.classList.add("hidden");
+  }
+  updateTotals();
+}
 
-    function updateDimensions(id, value, dimension) {
-      const product = products.find(p => p.id === id);
-      if (!product) return;
-
-      product[dimension] = value;
-      updateAmount(id);
-    }
-
-    function updateRate(id, value) {
-      const product = products.find(p => p.id === id);
-      if (!product) return;
-
-      product.rate = value;
-      updateAmount(id);
-    }
-
-    function updateAmount(id) {
-      const product = products.find(p => p.id === id);
-      if (!product) return;
-
-      const row = document.getElementById(`product-${id}`);
-      if (row) {
-        const amountInput = row.querySelector('input[readonly]');
-        if (amountInput) {
-          amountInput.value = calculateAmount(product);
-        }
-      }
-      updateTotals();
-    }
-
-    function updateProduct(id, property, value) {
-      const product = products.find(p => p.id === id);
-      if (!product) return;
-
-      product[property] = value;
-
-      // If product type changes, reset structure and finish
-      if (property === 'product') {
-        const selectedProduct = PRODUCTS.find(p => p.name === value);
-        if (selectedProduct) {
-          product.structure = selectedProduct.structure[0];
-          product.finish = selectedProduct.finish[0];
-        }
-      }
-
-      const row = document.getElementById(`product-${id}`);
-      if (row) row.remove(); // Re-render the row
-      renderProduct(id);
-      updateTotals();
-    }
-
-    function calculateAmount(p) {
-      const area = (parseFloat(p.length) || 0) * (parseFloat(p.breadth) || 0);
-      const rate = parseFloat(p.rate) || 0;
-      return (area * rate).toFixed(2);
-    }
-
-    function removeProduct(id) {
-      products = products.filter(p => p.id !== id);
-      const row = document.getElementById(`product-${id}`);
-      if (row) row.remove();
-      if (products.length === 0) {
-        productContainer.classList.add("hidden");
-        productHeader.classList.add("hidden");
-      }
-      updateTotals();
-    }
-
-    function updateTotals() {
-      let subtotal = 0;
-      products.forEach(p => {
-        subtotal += parseFloat(calculateAmount(p));
-      });
-      subtotalEl.textContent = `Subtotal: ₹${subtotal.toFixed(2)}`;
-      totalEl.textContent = `Total: ₹${subtotal.toFixed(2)}`;
-    }
-
+function updateTotals() {
+  let subtotal = products.reduce((sum, p) => sum + parseFloat(calculateAmount(p)), 0);
+  subtotalEl.textContent = `Subtotal: ₹${subtotal.toFixed(2)}`;
+  totalEl.textContent = `Total: ₹${subtotal.toFixed(2)}`;
+}
 
 
 
