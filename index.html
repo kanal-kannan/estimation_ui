@@ -278,6 +278,78 @@ function addProduct() {
   updateTotals();
 }
 
+
+function openCustomProductModal() {
+      const modal = document.getElementById("customProductModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+
+      // Populate structure/finish from default
+      const structureSelect = document.getElementById("customStructure");
+      const finishSelect = document.getElementById("customFinish");
+      structureSelect.innerHTML = PRODUCTS[0].structure.map(s => `<option>${s}</option>`).join('');
+      finishSelect.innerHTML = PRODUCTS[0].finish.map(f => `<option>${f}</option>`).join('');
+    }
+
+    function closeCustomProductModal() {
+      const modal = document.getElementById("customProductModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+
+      document.getElementById("customProductName").value = '';
+      document.getElementById("customRate").value = '';
+    }
+
+    function saveCustomProduct() {
+      const productName = document.getElementById("customProductName").value.trim();
+      const structure = document.getElementById("customStructure").value;
+      const finish = document.getElementById("customFinish").value;
+      const rate = parseFloat(document.getElementById("customRate").value);
+
+      if (!productName || isNaN(rate)) {
+        alert("Please enter valid product name and rate.");
+        return;
+      }
+
+      // Check if product already exists
+      const existingProduct = PRODUCTS.find(p => p.name.toLowerCase() === productName.toLowerCase());
+      
+      if (!existingProduct) {
+        // Add new product to PRODUCTS array
+        PRODUCTS.push({
+          name: productName,
+          structure: PRODUCTS[0].structure, // Use default structures
+          finish: PRODUCTS[0].finish // Use default finishes
+        });
+        // Save to localStorage
+        localStorage.setItem('savedProducts', JSON.stringify(PRODUCTS));
+      }
+
+      // Save the rate for this product type
+      const rateKey = `${productName}-${structure}-${finish}`;
+      savedRates[rateKey] = rate;
+      localStorage.setItem('savedRates', JSON.stringify(savedRates));
+
+      // Add the product to the list (not as custom)
+      const id = nextId++;
+      products.push({
+        id,
+        product: productName,
+        structure,
+        finish,
+        length: "",
+        breadth: "",
+        rate,
+        custom: false
+      });
+
+      closeCustomProductModal();
+      showHeaderIfHidden();
+      renderProduct(id);
+      updateTotals();
+    }
+
+
 // Show header and container when adding first product
 function showHeaderIfHidden() {
   if (productHeader.classList.contains("hidden")) {
@@ -286,7 +358,9 @@ function showHeaderIfHidden() {
   if (productContainer.classList.contains("hidden")) {
     productContainer.classList.remove("hidden");
   }
+  
 }
+
 
 // Render product row with proper rate handling
 function renderProduct(id) {
@@ -378,6 +452,11 @@ function renderProduct(id) {
       </button>
     </div>
   `;
+
+row.className = `
+  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-8 gap-4 
+  text-center items-center border p-2 rounded bg-white shadow-sm
+`;
 
   productContainer.appendChild(row);
 }
