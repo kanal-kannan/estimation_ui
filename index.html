@@ -17,6 +17,12 @@
       margin-bottom: 0.75rem;
     }
 
+     @media screen and (min-width: 0px) and (max-width: 480px) {
+      .headmenu{
+        display: none !important;
+      }
+     }
+
     @media (min-width: 768px) {
       .product-row {
         grid-template-columns: 1.5fr 1fr 1fr 0.8fr 0.8fr 0.8fr 0.8fr auto;
@@ -107,7 +113,7 @@
         </div>
       </div>
 <!-- Header -->
-<div id="productHeader" class="hidden md:grid grid-cols-7 gap-2 mb-2 text-xs sm:text-sm font-medium text-gray-700 text-center">
+<div id="productHeader" class=" headmenu hidden md:grid grid-cols-7 gap-2 mb-2 text-xs sm:text-sm font-medium text-gray-700 text-center">
   <div>Product</div>
   <div>Packages</div>
   <!-- <div>packages</div> -->
@@ -175,8 +181,8 @@
     localStorage.removeItem('savedProducts');
     let PRODUCTS =  [
       { name: "Wardrobe", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", "Luxury Acrylic Package"]},
-      { name: "Loft", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", "Luxury Acrylic Package"], },
-      { name: "Kitchen Kadappa / Shelf / Pooja -Door Only", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", "Luxury Acrylic Package"],  },
+      { name: "Loft", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", "Luxury Acrylic Package"] },
+      { name: "Kitchen Kadappa / Shelf / Pooja -Door Only", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", "Luxury Acrylic Package"]  },
       { name: "Modular Kitchen Bottom unit", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", " Luxury Acrylic Package"] },
       { name: "Kitchen Wall Unit", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", "Luxury Acrylic Package "] },
       { name: "Crockery Unit", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", " Luxury Acrylic Package"] },
@@ -192,21 +198,21 @@ const FIXED_RATES = {
   "Wardrobe-Value Package": 1150,
   "Wardrobe-Standard Package": 1200,
   "Wardrobe-Premium Package": 1350,
-  "Wardrobe- Luxury Acrylic Package": 1650,
+  "Wardrobe-Luxury Acrylic Package": 1650,
   
   // Loft rates
   "Loft-Essential Package": 800,
   "Loft-Value Package": 890,
   "Loft-Standard Package": 950,
   "Loft-Premium Package": 1050,
-  "Loft- Luxury Acrylic Package": 1400,
+  "Loft-Luxury Acrylic Package": 1400,
   
   // Kitchen Kadappa rates
   "Kitchen Kadappa / Shelf / Pooja -Door Only-Essential Package": 800,
   "Kitchen Kadappa / Shelf / Pooja -Door Only-Value Package": 890,
   "Kitchen Kadappa / Shelf / Pooja -Door Only-Standard Package": 950,
   "Kitchen Kadappa / Shelf / Pooja -Door Only-Premium Package": 1050,
-  "Kitchen Kadappa / Shelf / Pooja -Door Only- Luxury Acrylic Package": 1400,
+  "Kitchen Kadappa / Shelf / Pooja -Door Only-Luxury Acrylic Package": 1400,
 
   
   // Modular Kitchen Bottom unit rates
@@ -214,7 +220,7 @@ const FIXED_RATES = {
   "Modular Kitchen Bottom unit-Value Package": 1150,
   "Modular Kitchen Bottom unit-Standard Package": 1200,
   "Modular Kitchen Bottom unit-Premium Package": 1350,
-  "Modular Kitchen Bottom unit- Luxury Acrylic Package": 1650,
+  "Modular Kitchen Bottom unit-Luxury Acrylic Package": 1650,
 
   
   // Kitchen Wall Unit rates
@@ -222,7 +228,7 @@ const FIXED_RATES = {
   "Kitchen Wall Unit-Value Package": 1125,
   "Kitchen Wall Unit-Standard Package": 1175,
   "Kitchen Wall Unit-Premium Package": 1300,
-  "Kitchen Wall Unit- Luxury Acrylic Package": 1600,
+  "Kitchen Wall Unit-Luxury Acrylic Package": 1600,
 
   
   // Crockery Unit rates
@@ -230,7 +236,7 @@ const FIXED_RATES = {
   "Crockery Unit-Value Package": 1150,
   "Crockery Unit-Standard Package": 1200,
   "Crockery Unit-Premium Package": 1350,
-  "Crockery Unit- Luxury Acrylic Package": 1650,
+  "Crockery Unit-Luxury Acrylic Package": 1650,
 
   
   // Pooja unit rates
@@ -238,7 +244,7 @@ const FIXED_RATES = {
   "Pooja Box-Value Package": 1150,
   "Pooja Box-Standard Package": 1200,
   "Pooja Box-Premium Package": 1350,
-  "Pooja Box- Luxury Acrylic Package": 1650,
+  "Pooja Box-Luxury Acrylic Package": 1650,
 
   
   // TV Unit rates
@@ -246,7 +252,7 @@ const FIXED_RATES = {
   "TV Unit-Value Package": 1050,
   "TV Unit-Standard Package": 1100,
   "TV Unit-Premium Package": 1200,
-  "TV Unit- Luxury Acrylic Package": 1500,
+  "TV Unit-Luxury Acrylic Package": 1500,
 
   
   // Panelling Work rates
@@ -254,7 +260,7 @@ const FIXED_RATES = {
   "Panelling Work-Value Package": 850,
   "Panelling Work-Standard Package": 900,
   "Panelling Work-Premium Package": 1000,
-  "Panelling Work- Luxury Acrylic Package": 1300
+  "Panelling Work-Luxury Acrylic Package": 1300
 
 };
 
@@ -309,144 +315,115 @@ function addProduct() {
 
 
 function openCustomProductModal() {
-      const modal = document.getElementById("customProductModal");
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
+  const modal = document.getElementById("customProductModal");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
 
-      // Populate packages/finish from default
-      const packagesSelect = document.getElementById("custompackages");
-      // const finishSelect = document.getElementById("customFinish");
-      packagesSelect.innerHTML = PRODUCTS[0].packages.map(s => `<option>${s}</option>`).join('');
-      // finishSelect.innerHTML = PRODUCTS[0].finish.map(f => `<option>${f}</option>`).join('');
-    }
-
-    function closeCustomProductModal() {
-      const modal = document.getElementById("customProductModal");
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-
-      document.getElementById("customProductName").value = '';
-      document.getElementById("customRate").value = '';
-    }
-
-    function saveCustomProduct() {
-      const productName = document.getElementById("customProductName").value.trim();
-      const packages = document.getElementById("custompackages").value;
-      // const finish = document.getElementById("customFinish").value;
-      const rate = parseFloat(document.getElementById("customRate").value);
-
-      if (!productName || isNaN(rate)) {
-        alert("Please enter valid product name and rate.");
-        return;
-      }
-
-      // Check if product already exists
-      const existingProduct = PRODUCTS.find(p => p.name.toLowerCase() === productName.toLowerCase());
-      
-      if (!existingProduct) {
-        // Add new product to PRODUCTS array
-        PRODUCTS.push({
-          name: productName,
-          packages: PRODUCTS[0].packages, // Use default packagess
-          // finish: PRODUCTS[0].finish // Use default finishes
-        });
-        // Save to localStorage
-        localStorage.setItem('savedProducts', JSON.stringify(PRODUCTS));
-      }
-
-      // Save the rate for this product type
-      const rateKey = `${productName}-${packages}`;
-      savedRates[rateKey] = rate;
-      localStorage.setItem('savedRates', JSON.stringify(savedRates));
-
-      // Add the product to the list (not as custom)
-      const id = nextId++;
-      products.push({
-        id,
-        product: productName,
-        packages,
-        // finish,
-        length: "",
-        breadth: "",
-        rate,
-        custom: false
-      });
-
-      closeCustomProductModal();
-      showHeaderIfHidden();
-      renderProduct(id);
-      updateTotals();
-    }
-
-
-// Show header and container when adding first product
-function showHeaderIfHidden() {
-  if (productHeader.classList.contains("hidden")) {
-    productHeader.classList.remove("hidden");
-  }
-  if (productContainer.classList.contains("hidden")) {
-    productContainer.classList.remove("hidden");
-  }
-  
+  // Populate packages from the first product's default packages
+  const packagesSelect = document.getElementById("custompackages");
+  packagesSelect.innerHTML = PRODUCTS[0].packages.map(s => `<option>${s}</option>`).join('');
 }
 
+function closeCustomProductModal() {
+  const modal = document.getElementById("customProductModal");
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+  document.getElementById("customProductName").value = '';
+  document.getElementById("customRate").value = '';
+}
 
-// Render product row with proper rate handling
+function saveCustomProduct() {
+  const productName = document.getElementById("customProductName").value.trim();
+  const packages = document.getElementById("custompackages").value;
+  const rate = parseFloat(document.getElementById("customRate").value);
+
+  if (!productName || isNaN(rate)) {
+    alert("Please enter a valid product name and rate.");
+    return;
+  }
+
+  // Find if product already exists
+  let existingProduct = PRODUCTS.find(p => p.name.toLowerCase() === productName.toLowerCase());
+
+  if (!existingProduct) {
+    // Add new product to PRODUCTS array
+    const newProduct = {
+      name: productName,
+      packages: PRODUCTS[0].packages, // Use default packages
+      rate: rate
+    };
+    PRODUCTS.push(newProduct);
+    existingProduct = newProduct;
+    localStorage.setItem('savedProducts', JSON.stringify(PRODUCTS));
+  } else {
+    existingProduct.rate = rate;
+    localStorage.setItem('savedProducts', JSON.stringify(PRODUCTS));
+  }
+
+  // Save rate for this specific combination
+  const rateKey = `${productName}-${packages}`;
+  savedRates[rateKey] = rate;
+  localStorage.setItem('savedRates', JSON.stringify(savedRates));
+
+  const id = nextId++;
+  products.push({
+    id,
+    product: productName,
+    packages: packages,
+    length: "",
+    breadth: "",
+    rate: rate,
+    custom: false
+  });
+
+  closeCustomProductModal();
+  showHeaderIfHidden();
+  renderProduct(id);
+  updateTotals();
+}
+
 function renderProduct(id) {
   const product = products.find(p => p.id === id);
   if (!product) return;
 
   const row = document.createElement("div");
-  row.className = "product-row grid grid-cols-1 sm:grid-cols-2 md:grid-cols-8 gap-4 text-center items-center border p-2 rounded bg-white shadow-sm";
+  row.className = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-4 text-center items-center border p-2 rounded bg-white shadow-sm";
   row.id = `product-${id}`;
 
   const productOptions = PRODUCTS.map(p =>
     `<option value="${p.name}" ${p.name === product.product ? 'selected' : ''}>${p.name}</option>`
   ).join('');
-  
+
   const selectedProduct = PRODUCTS.find(p => p.name === product.product) || PRODUCTS[0];
-  const packagesOptions = selectedProduct.packages.map(g =>
-    `<option ${g === product.packages ? 'selected' : ''}>${g}</option>`
+  const packagesOptions = selectedProduct.packages.map(p =>
+    `<option ${p === product.packages ? 'selected' : ''}>${p}</option>`
   ).join('');
-  
-  // const finishOptions = selectedProduct.finish.map(m =>
-  //   `<option ${m === product.finish ? 'selected' : ''}>${m}</option>`
-  // ).join('');
 
   row.innerHTML = `
-    <!-- Product -->
     <div class="flex flex-col">
       <label class="text-left text-xs text-gray-500 md:hidden">Product</label>
       <select onchange="updateProduct(${id}, 'product', this.value)" class="p-2 border rounded w-full">
         ${productOptions}
       </select>
     </div>
-
-    <!-- packages -->
     <div class="flex flex-col">
-      <label class="text-left text-xs text-gray-500 md:hidden">packages</label>
+      <label class="text-left text-xs text-gray-500 md:hidden">Packages</label>
       <select onchange="updateProduct(${id}, 'packages', this.value)" class="p-2 border rounded w-full">
         ${packagesOptions}
       </select>
     </div>
-
-
-    <!-- Dimensions -->
     <div class="flex flex-col">
       <label class="text-left text-xs text-gray-500 md:hidden">Length (ft)</label>
       <input type="number" min="0" step="0.1" value="${product.length}"
              oninput="updateDimension(${id}, 'length', this.value)"
              class="p-2 border rounded w-full" placeholder="Length">
     </div>
-
     <div class="flex flex-col">
       <label class="text-left text-xs text-gray-500 md:hidden">Breadth (ft)</label>
       <input type="number" min="0" step="0.1" value="${product.breadth}"
              oninput="updateDimension(${id}, 'breadth', this.value)"
              class="p-2 border rounded w-full" placeholder="Breadth">
     </div>
-
-    <!-- Rate with edit button -->
     <div class="flex flex-col">
       <label class="text-left text-xs text-gray-500 md:hidden">Rate (₹)</label>
       <div class="flex justify-center items-center gap-2">
@@ -458,32 +435,24 @@ function renderProduct(id) {
         </button>
       </div>
     </div>
-
-    <!-- Amount -->
     <div class="flex flex-col">
       <label class="text-left text-xs text-gray-500 md:hidden">Amount (₹)</label>
       <input type="text" readonly value="${calculateAmount(product)}"
              class="p-2 border rounded bg-gray-100 w-full">
     </div>
-
-    <!-- Remove Button -->
     <div class="flex flex-col">
       <label class="text-left text-xs text-gray-500 md:hidden">Action</label>
-      <button onclick="removeProduct(${id})" class="text-red-500 hover:text-red-700 p-2 border rounded">
-        Remove
-      </button>
+      <button onclick="removeProduct(${id})" class="text-red-500 hover:text-red-700 p-2 border rounded">Remove</button>
     </div>
   `;
-
-row.className = `
+  
+ row.className = `
   grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-4 
   text-center items-center border p-2 rounded bg-white shadow-sm
 `;
-
   productContainer.appendChild(row);
 }
 
-// Rate modal functions
 let currentRateEditId = null;
 
 function openRateModal(id) {
@@ -505,12 +474,10 @@ function saveRate() {
   if (currentRateEditId !== null) {
     const product = products.find(p => p.id === currentRateEditId);
     if (product) {
-      // Save rate for this product configuration
       const rateKey = `${product.product}-${product.packages}`;
       savedRates[rateKey] = newRate;
       localStorage.setItem('savedRates', JSON.stringify(savedRates));
-      
-      // Update product and UI
+
       product.rate = newRate;
       const row = document.getElementById(`product-${product.id}`);
       if (row) row.remove();
@@ -521,36 +488,28 @@ function saveRate() {
   closeRateModal();
 }
 
-// Update product details with rate preservation
 function updateProduct(id, property, value) {
   const product = products.find(p => p.id === id);
   if (!product) return;
 
   product[property] = value;
 
-  // If product type changes, reset packages and finish
   if (property === 'product') {
     const selectedProduct = PRODUCTS.find(p => p.name === value);
     if (selectedProduct) {
       product.packages = selectedProduct.packages[0];
-      // product.finish = selectedProduct.finish[0];
     }
   }
 
-  // Apply fixed rate based on product and packages
   const rateKey = `${product.product}-${product.packages}`;
-  if (FIXED_RATES[rateKey]) {
-    product.rate = FIXED_RATES[rateKey];
-  }
+  product.rate = savedRates[rateKey] ?? FIXED_RATES[rateKey] ?? product.rate;
 
-  // Re-render the row
   const row = document.getElementById(`product-${id}`);
   if (row) row.remove();
   renderProduct(id);
   updateTotals();
 }
 
-// Helper functions
 function calculateAmount(product) {
   const area = (parseFloat(product.length) || 0) * (parseFloat(product.breadth) || 0);
   return (area * (parseFloat(product.rate) || 0)).toFixed(2);
@@ -567,7 +526,6 @@ function updateDimension(id, field, value) {
 function updateAmount(id) {
   const product = products.find(p => p.id === id);
   if (!product) return;
-
   const row = document.getElementById(`product-${id}`);
   if (row) {
     const amountInput = row.querySelector('input[readonly]');
@@ -582,7 +540,6 @@ function removeProduct(id) {
   products = products.filter(p => p.id !== id);
   const row = document.getElementById(`product-${id}`);
   if (row) row.remove();
-  
   if (products.length === 0) {
     productHeader.classList.add("hidden");
     productContainer.classList.add("hidden");
@@ -602,7 +559,7 @@ function updateTotals() {
 
     function generatePDF() {
 
-      function numberToWords(num) {
+   function numberToWords(num) {
   const a = [
     '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
     'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
@@ -631,49 +588,53 @@ function updateTotals() {
   return words + ' only';
 }
 
-  const clientName = document.querySelector('input[type="text"]').value || 'Not provided';
-  const clientPhone = document.querySelector('input[type="tel"]').value || 'Not provided';
-  const date = document.getElementById('dateInput').value || new Date().toLocaleDateString();
+const clientName = document.getElementById('clientName').value || 'Not provided';
+const clientPhone = document.getElementById('clientPhone').value || 'Not provided';
+const date = document.getElementById('dateInput').value || new Date().toLocaleDateString();
 
-  const element = document.createElement('div');
-  element.style.padding = '20px';
-  element.style.fontFamily = 'Arial, sans-serif';
-
-  element.innerHTML = `
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-  <div style="flex: 2; font-size: 12px; color: #555; line-height: 1.3;">
-    <div>No. 3, Aruna Nagar, Medical College Road,</div>
-    <div>Thanjavur – 613004, Tamil Nadu</div>
-    <div>📞 <a href="tel:+918825696139">+91 88256 96139</a> | ✉️ <a href="mailto:mail@creativedesignstudios.in">mail@creativedesignstudios.in</a></div>
-    <div>🌐 <a href="https://www.creativedesignstudios.in">www.creativedesignstudios.in</a></div>
-  </div>
-
-  <div style="flex: 1; text-align: right;">
-    <img src="assets/Logo small file.png" alt="Logo" style="height: 60px;" crossorigin="anonymous">
-  </div>
-</div>
-
-  
-</div>
-
-<h1 style="color: #FD9800; font-size: 24px; font-weight: bold; text-align: center; margin-top: -10px; margin-bottom: 20px;">
-  Interior Work Estimate
-</h1>
+const element = document.createElement('div');
+element.style.padding = '20px';
+element.style.fontFamily = 'Arial, sans-serif';
+element.style.width = '100%';
+element.style.maxWidth = '720px';
+element.style.boxSizing = 'border-box';
 
 
-      <div style="display: flex; justify-content: space-between; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
-        <div style="text-align: left;">
-          <p><strong>Client:</strong> ${clientName}</p>
-          <p><strong>Phone:</strong> ${clientPhone}</p>
-        </div>
-        <div style="text-align: right;">
-          <p><strong>Date:</strong> ${date}</p>
-        </div>
-      </div>
+// Add responsive CSS
+element.innerHTML = `
+
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div style="flex: 2; font-size: 12px; color: #555; line-height: 1.3;">
+      <div>No. 3, Aruna Nagar, Medical College Road,</div>
+      <div>Thanjavur – 613004, Tamil Nadu</div>
+      <div>📞 <a href="tel:+918825696139">+91 88256 96139</a> | ✉️ <a href="mailto:mail@creativedesignstudios.in">mail@creativedesignstudios.in</a></div>
+      <div>🌐 <a href="https://www.creativedesignstudios.in">www.creativedesignstudios.in</a></div>
     </div>
-  `;
+    <div style="flex: 1; text-align: right;">
+      <img src="assets/Logo small file.png" alt="Logo" style="height: 60px;" crossorigin="anonymous">
+    </div>
+  </div>
 
-  let tableHTML = `
+  <h1 style="color: #FD9800; font-size: 24px; font-weight: bold; text-align: center; margin-top: -10px; margin-bottom: 20px;">
+    Interior Work Estimate
+  </h1>
+
+  <div style="display: flex; justify-content: space-between; margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+    <div style="text-align: left;">
+      
+        <p><strong>Client Name:</strong> ${clientName}</p>
+      <p><strong>Phone No:</strong> ${clientPhone}</p>
+    </div>
+    <div style="text-align: right;">
+      <p><strong>Date:</strong> ${date}</p>
+    </div>
+  </div>
+`;
+
+
+// Build the product table...
+let tableHTML = `
   <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 12px;">
     <thead>
       <tr style="background-color: #f3f4f6;">
@@ -687,9 +648,7 @@ function updateTotals() {
 `;
 
 products.forEach(product => {
-  const description = `
-    <strong>${product.product}</strong> - with the package of <strong>${product.packages}</strong>
-  `;
+  const description = `<strong>${product.product}</strong> - with the <strong>${product.packages}</strong>`;
   tableHTML += `
     <tr>
       <td style="padding: 8px; border: 1px solid #d1d5db;">${description}</td>
@@ -699,22 +658,18 @@ products.forEach(product => {
     </tr>
   `;
 });
-
 const subtotal = products.reduce((sum, p) => sum + parseFloat(calculateAmount(p)), 0);
-
 const amountInWords = numberToWords(subtotal);
 
 tableHTML += `
-  </tbody>
-</table>
-<div style="text-align: right; margin: 20px 0;">
-  <p style="font-size: 14px;"><strong>Subtotal:</strong> ₹${subtotal.toFixed(2)}</p>
-  <p style="font-size: 16px; font-weight: bold;"><strong>Total:</strong> ₹${subtotal.toFixed(2)}</p>
-  <p style="font-size: 14px; margin-top: 10px;"><strong>In Words:</strong> ${amountInWords}</p>
-</div>
+    </tbody>
+  </table>
+  <div style="text-align: right; margin: 20px 0;">
+    <p style="font-size: 14px;"><strong>Subtotal:</strong> ₹${subtotal.toFixed(2)}</p>
+    <p style="font-size: 16px; font-weight: bold;"><strong>Total:</strong> ₹${subtotal.toFixed(2)}</p>
+    <p style="font-size: 14px; margin-top: 10px;"><strong>In Words:</strong> ${amountInWords}</p>
+  </div>
 `;
-
-
 element.innerHTML += tableHTML;
 
   // Page break here for second page
@@ -786,6 +741,16 @@ element.innerHTML += tableHTML;
 }
 
 
+// Show header and container when adding first product
+function showHeaderIfHidden() {
+  if (productHeader.classList.contains("hidden")) {
+    productHeader.classList.remove("hidden");
+  }
+  if (productContainer.classList.contains("hidden")) {
+    productContainer.classList.remove("hidden");
+  }
+  
+}
 
 const popupButton = document.getElementById('popupButton');
     const popup = document.getElementById('popup');
