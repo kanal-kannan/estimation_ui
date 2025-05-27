@@ -56,8 +56,8 @@
     <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
       <h2 class="text-lg font-bold mb-4">Add Custom Product</h2>
       <input id="customProductName" type="text" placeholder="Product Name" class="w-full mb-3 p-2 border rounded">
-      <select id="customStructure" class="w-full mb-3 p-2 border rounded"></select>
-      <select id="customFinish" class="w-full mb-3 p-2 border rounded"></select>
+      <select id="custompackages" class="w-full mb-3 p-2 border rounded"></select>
+      <!-- <select id="customFinish" class="w-full mb-3 p-2 border rounded"></select> -->
       <input id="customRate" type="number" placeholder="Rate" class="w-full mb-3 p-2 border rounded" min="0">
       <div class="flex justify-end gap-2">
         <button onclick="closeCustomProductModal()" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
@@ -71,9 +71,21 @@
     <div class="bg-blue-600 text-white p-4 sm:p-6">
       <div class="flex justify-between items-center">
         <h1 class="text-xl sm:text-2xl md:text-3xl font-bold">Interior Work Estimator</h1>
-        <svg class="w-6 h-6 sm:w-8 sm:h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-        </svg>
+        <button id="popupButton" class="p-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white">
+    <svg class="w-6 h-6 sm:w-8 sm:h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+    </svg>
+  </button>
+
+  <!-- Popup (hidden by default) -->
+ <div id="popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+  <div class="bg-white rounded-lg p-4 w-[90%] sm:w-[80%] md:w-[70%] lg:w-[62rem]">
+    <img src="assets/list.png" alt="Popup Image" class="rounded w-full h-auto">
+    <button id="closePopup" class="mt-4 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded">Close</button>
+  </div>
+</div>
+
       </div>
     </div>
 
@@ -95,10 +107,11 @@
         </div>
       </div>
 <!-- Header -->
-<div id="productHeader" class="hidden md:grid grid-cols-8 gap-2 mb-2 text-xs sm:text-sm font-medium text-gray-700 text-center">
+<div id="productHeader" class="hidden md:grid grid-cols-7 gap-2 mb-2 text-xs sm:text-sm font-medium text-gray-700 text-center">
   <div>Product</div>
-  <div>Structure</div>
-  <div>Finish</div>
+  <div>Packages</div>
+  <!-- <div>packages</div> -->
+  <!-- <div>Finish</div> -->
   <div>Length (ft)</div>
   <div>Breadth (ft)</div>
   <div>Rate (₹)</div>
@@ -161,72 +174,88 @@
     // Initialize products array with localStorage data if available
     localStorage.removeItem('savedProducts');
     let PRODUCTS =  [
-      { name: "Wardrobe", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminate","Archilam / Advance -Laminate", "Acrylic"] },
-      { name: "Loft", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminatete","Archilam / Advance -Laminate", "Acrylic"] },
-      { name: "Kitchen Kadappa / Shelf / Pooja -Door Only", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminatete","Archilam / Advance -Laminate", "Acrylic"] },
-      { name: "Modular Kitchen Bottom unit", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminate","Archilam / Advance -Laminate", "Acrylic"] },
-      { name: "Kitchen Wall Unit", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminate","Archilam / Advance -Laminate", "Acrylic"] },
-      { name: "Crockery Unit", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminate","Archilam / Advance -Laminate", "Acrylic"] },
-      { name: "Pooja Box", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminate","Archilam / Advance -Laminate", "Acrylic"] },
-      { name: "TV Unit", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminate","Archilam / Advance -Laminate", "Acrylic"] },
-      { name: "Panelling Work", structure: ["Prelaminate", "HDHMR", "ISO - BWR/BWP", "Century / Sharon BWP/BWR", "Century / Sharon BWP/BWR"], finish: ["Prelaminate", "Laminate","Archilam / Advance -Laminate", "Acrylic"] }
+      { name: "Wardrobe", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", "Luxury Acrylic Package"]},
+      { name: "Loft", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", "Luxury Acrylic Package"], },
+      { name: "Kitchen Kadappa / Shelf / Pooja -Door Only", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", "Luxury Acrylic Package"],  },
+      { name: "Modular Kitchen Bottom unit", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", " Luxury Acrylic Package"] },
+      { name: "Kitchen Wall Unit", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", "Luxury Acrylic Package "] },
+      { name: "Crockery Unit", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", " Luxury Acrylic Package"] },
+      { name: "Pooja Box", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", " Luxury Acrylic Package"] },
+      { name: "TV Unit", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", " Luxury Acrylic Package"] },
+      { name: "Panelling Work", packages: ["Essential Package", "Value Package", "Standard Package", "Premium Package", " Luxury Acrylic Package"] }
     ];
 
 
 const FIXED_RATES = {
   // Wardrobe rates
-  "Wardrobe-Prelaminate": 1065,
-  "Wardrobe-HDHMR": 1150,
-  "Wardrobe-ISO - BWR/BWP": 1350,
-  "Wardrobe-Century / Sharon BWP/BWR": 1650,
+  "Wardrobe-Essential Package": 1065,
+  "Wardrobe-Value Package": 1150,
+  "Wardrobe-Standard Package": 1200,
+  "Wardrobe-Premium Package": 1350,
+  "Wardrobe- Luxury Acrylic Package": 1650,
   
   // Loft rates
-  "Loft-Prelaminate": 800,
-  "Loft-HDHMR": 890,
-  "Loft-ISO - BWR/BWP": 1050,
-  "Loft-Century / Sharon BWP/BWR": 1400,
+  "Loft-Essential Package": 800,
+  "Loft-Value Package": 890,
+  "Loft-Standard Package": 950,
+  "Loft-Premium Package": 1050,
+  "Loft- Luxury Acrylic Package": 1400,
   
   // Kitchen Kadappa rates
-  "Kitchen Kadappa / Shelf / Pooja -Door Only-Prelaminate": 800,
-  "Kitchen Kadappa / Shelf / Pooja -Door Only-HDHMR": 890,
-  "Kitchen Kadappa / Shelf / Pooja -Door Only-ISO - BWR/BWP": 1050,
-  "Kitchen Kadappa / Shelf / Pooja -Door Only-Century / Sharon BWP/BWR": 1400,
+  "Kitchen Kadappa / Shelf / Pooja -Door Only-Essential Package": 800,
+  "Kitchen Kadappa / Shelf / Pooja -Door Only-Value Package": 890,
+  "Kitchen Kadappa / Shelf / Pooja -Door Only-Standard Package": 950,
+  "Kitchen Kadappa / Shelf / Pooja -Door Only-Premium Package": 1050,
+  "Kitchen Kadappa / Shelf / Pooja -Door Only- Luxury Acrylic Package": 1400,
+
   
   // Modular Kitchen Bottom unit rates
-  "Modular Kitchen Bottom unit-Prelaminate": 1065,
-  "Modular Kitchen Bottom unit-HDHMR": 1150,
-  "Modular Kitchen Bottom unit-ISO - BWR/BWP": 1350,
-  "Modular Kitchen Bottom unit-Century / Sharon BWP/BWR": 1650,
+  "Modular Kitchen Bottom unit-Essential Package": 1065,
+  "Modular Kitchen Bottom unit-Value Package": 1150,
+  "Modular Kitchen Bottom unit-Standard Package": 1200,
+  "Modular Kitchen Bottom unit-Premium Package": 1350,
+  "Modular Kitchen Bottom unit- Luxury Acrylic Package": 1650,
+
   
   // Kitchen Wall Unit rates
-  "Kitchen Wall Unit-Prelaminate": 1050,
-  "Kitchen Wall Unit-HDHMR": 1125,
-  "Kitchen Wall Unit-ISO - BWR/BWP": 1300,
-  "Kitchen Wall Unit-Century / Sharon BWP/BWR": 1600,
+  "Kitchen Wall Unit-Essential Package": 1050,
+  "Kitchen Wall Unit-Value Package": 1125,
+  "Kitchen Wall Unit-Standard Package": 1175,
+  "Kitchen Wall Unit-Premium Package": 1300,
+  "Kitchen Wall Unit- Luxury Acrylic Package": 1600,
+
   
   // Crockery Unit rates
-  "Crockery Unit-Prelaminate": 1065,
-  "Crockery Unit-HDHMR": 1150,
-  "Crockery Unit-ISO - BWR/BWP": 1350,
-  "Crockery Unit-Century / Sharon BWP/BWR": 1650,
+  "Crockery Unit-Essential Package": 1065,
+  "Crockery Unit-Value Package": 1150,
+  "Crockery Unit-Standard Package": 1200,
+  "Crockery Unit-Premium Package": 1350,
+  "Crockery Unit- Luxury Acrylic Package": 1650,
+
   
   // Pooja unit rates
-  "Pooja Box-Prelaminate": 1065,
-  "Pooja Box-HDHMR": 1150,
-  "Pooja Box-ISO - BWR/BWP": 1350,
-  "Pooja Box-Century / Sharon BWP/BWR": 1650,
+  "Pooja Box-Essential Package": 1065,
+  "Pooja Box-Value Package": 1150,
+  "Pooja Box-Standard Package": 1200,
+  "Pooja Box-Premium Package": 1350,
+  "Pooja Box- Luxury Acrylic Package": 1650,
+
   
   // TV Unit rates
-  "TV Unit-Prelaminate": 1000,
-  "TV Unit-HDHMR": 1050,
-  "TV Unit-ISO - BWR/BWP": 1200,
-  "TV Unit-Century / Sharon BWP/BWR": 1500,
+  "TV Unit-Essential Package": 1000,
+  "TV Unit-Value Package": 1050,
+  "TV Unit-Standard Package": 1100,
+  "TV Unit-Premium Package": 1200,
+  "TV Unit- Luxury Acrylic Package": 1500,
+
   
   // Panelling Work rates
-  "Panelling Work-Prelaminate": 700,
-  "Panelling Work-HDHMR": 850,
-  "Panelling Work-ISO - BWR/BWP": 1000,
-  "Panelling Work-Century / Sharon BWP/BWR": 1300
+  "Panelling Work-Essential Package": 700,
+  "Panelling Work-Value Package": 850,
+  "Panelling Work-Standard Package": 900,
+  "Panelling Work-Premium Package": 1000,
+  "Panelling Work- Luxury Acrylic Package": 1300
+
 };
 
 
@@ -257,18 +286,18 @@ function addProduct() {
   showHeaderIfHidden();
   const id = nextId++;
   const defaultProduct = "Wardrobe";
-  const defaultStructure = "Prelaminate";
-  const defaultFinish = "Prelaminate";
+  const defaultpackages = "Essential Package";
+  // const defaultFinish = "Essential Package";
   
   // Get fixed rate for this combination
-  const rateKey = `${defaultProduct}-${defaultStructure}`;
+  const rateKey = `${defaultProduct}-${defaultpackages}`;
   const defaultRate = FIXED_RATES[rateKey] || 1000;
 
   products.push({
     id,
     product: defaultProduct,
-    structure: defaultStructure,
-    finish: defaultFinish,
+    packages: defaultpackages,
+    // finish: defaultFinish,
     length: "",
     breadth: "",
     rate: defaultRate,
@@ -284,11 +313,11 @@ function openCustomProductModal() {
       modal.classList.remove("hidden");
       modal.classList.add("flex");
 
-      // Populate structure/finish from default
-      const structureSelect = document.getElementById("customStructure");
-      const finishSelect = document.getElementById("customFinish");
-      structureSelect.innerHTML = PRODUCTS[0].structure.map(s => `<option>${s}</option>`).join('');
-      finishSelect.innerHTML = PRODUCTS[0].finish.map(f => `<option>${f}</option>`).join('');
+      // Populate packages/finish from default
+      const packagesSelect = document.getElementById("custompackages");
+      // const finishSelect = document.getElementById("customFinish");
+      packagesSelect.innerHTML = PRODUCTS[0].packages.map(s => `<option>${s}</option>`).join('');
+      // finishSelect.innerHTML = PRODUCTS[0].finish.map(f => `<option>${f}</option>`).join('');
     }
 
     function closeCustomProductModal() {
@@ -302,8 +331,8 @@ function openCustomProductModal() {
 
     function saveCustomProduct() {
       const productName = document.getElementById("customProductName").value.trim();
-      const structure = document.getElementById("customStructure").value;
-      const finish = document.getElementById("customFinish").value;
+      const packages = document.getElementById("custompackages").value;
+      // const finish = document.getElementById("customFinish").value;
       const rate = parseFloat(document.getElementById("customRate").value);
 
       if (!productName || isNaN(rate)) {
@@ -318,15 +347,15 @@ function openCustomProductModal() {
         // Add new product to PRODUCTS array
         PRODUCTS.push({
           name: productName,
-          structure: PRODUCTS[0].structure, // Use default structures
-          finish: PRODUCTS[0].finish // Use default finishes
+          packages: PRODUCTS[0].packages, // Use default packagess
+          // finish: PRODUCTS[0].finish // Use default finishes
         });
         // Save to localStorage
         localStorage.setItem('savedProducts', JSON.stringify(PRODUCTS));
       }
 
       // Save the rate for this product type
-      const rateKey = `${productName}-${structure}-${finish}`;
+      const rateKey = `${productName}-${packages}`;
       savedRates[rateKey] = rate;
       localStorage.setItem('savedRates', JSON.stringify(savedRates));
 
@@ -335,8 +364,8 @@ function openCustomProductModal() {
       products.push({
         id,
         product: productName,
-        structure,
-        finish,
+        packages,
+        // finish,
         length: "",
         breadth: "",
         rate,
@@ -376,13 +405,13 @@ function renderProduct(id) {
   ).join('');
   
   const selectedProduct = PRODUCTS.find(p => p.name === product.product) || PRODUCTS[0];
-  const structureOptions = selectedProduct.structure.map(g =>
-    `<option ${g === product.structure ? 'selected' : ''}>${g}</option>`
+  const packagesOptions = selectedProduct.packages.map(g =>
+    `<option ${g === product.packages ? 'selected' : ''}>${g}</option>`
   ).join('');
   
-  const finishOptions = selectedProduct.finish.map(m =>
-    `<option ${m === product.finish ? 'selected' : ''}>${m}</option>`
-  ).join('');
+  // const finishOptions = selectedProduct.finish.map(m =>
+  //   `<option ${m === product.finish ? 'selected' : ''}>${m}</option>`
+  // ).join('');
 
   row.innerHTML = `
     <!-- Product -->
@@ -393,21 +422,14 @@ function renderProduct(id) {
       </select>
     </div>
 
-    <!-- Structure -->
+    <!-- packages -->
     <div class="flex flex-col">
-      <label class="text-left text-xs text-gray-500 md:hidden">Structure</label>
-      <select onchange="updateProduct(${id}, 'structure', this.value)" class="p-2 border rounded w-full">
-        ${structureOptions}
+      <label class="text-left text-xs text-gray-500 md:hidden">packages</label>
+      <select onchange="updateProduct(${id}, 'packages', this.value)" class="p-2 border rounded w-full">
+        ${packagesOptions}
       </select>
     </div>
 
-    <!-- Finish -->
-    <div class="flex flex-col">
-      <label class="text-left text-xs text-gray-500 md:hidden">Finish</label>
-      <select onchange="updateProduct(${id}, 'finish', this.value)" class="p-2 border rounded w-full">
-        ${finishOptions}
-      </select>
-    </div>
 
     <!-- Dimensions -->
     <div class="flex flex-col">
@@ -454,7 +476,7 @@ function renderProduct(id) {
   `;
 
 row.className = `
-  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-8 gap-4 
+  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-4 
   text-center items-center border p-2 rounded bg-white shadow-sm
 `;
 
@@ -484,7 +506,7 @@ function saveRate() {
     const product = products.find(p => p.id === currentRateEditId);
     if (product) {
       // Save rate for this product configuration
-      const rateKey = `${product.product}-${product.structure}-${product.finish}`;
+      const rateKey = `${product.product}-${product.packages}`;
       savedRates[rateKey] = newRate;
       localStorage.setItem('savedRates', JSON.stringify(savedRates));
       
@@ -506,17 +528,17 @@ function updateProduct(id, property, value) {
 
   product[property] = value;
 
-  // If product type changes, reset structure and finish
+  // If product type changes, reset packages and finish
   if (property === 'product') {
     const selectedProduct = PRODUCTS.find(p => p.name === value);
     if (selectedProduct) {
-      product.structure = selectedProduct.structure[0];
-      product.finish = selectedProduct.finish[0];
+      product.packages = selectedProduct.packages[0];
+      // product.finish = selectedProduct.finish[0];
     }
   }
 
-  // Apply fixed rate based on product and structure
-  const rateKey = `${product.product}-${product.structure}`;
+  // Apply fixed rate based on product and packages
+  const rateKey = `${product.product}-${product.packages}`;
   if (FIXED_RATES[rateKey]) {
     product.rate = FIXED_RATES[rateKey];
   }
@@ -666,7 +688,7 @@ function updateTotals() {
 
 products.forEach(product => {
   const description = `
-    <strong>${product.product}</strong> - structure with <strong>${product.structure}</strong> - with <strong>${product.finish}</strong> Finish
+    <strong>${product.product}</strong> - with the package of <strong>${product.packages}</strong>
   `;
   tableHTML += `
     <tr>
@@ -763,6 +785,26 @@ element.innerHTML += tableHTML;
   html2pdf().set(opt).from(element).save();
 }
 
+
+
+const popupButton = document.getElementById('popupButton');
+    const popup = document.getElementById('popup');
+    const closePopup = document.getElementById('closePopup');
+
+    popupButton.addEventListener('click', () => {
+      popup.classList.remove('hidden');
+    });
+
+    closePopup.addEventListener('click', () => {
+      popup.classList.add('hidden');
+    });
+
+    // Optional: close popup when clicking outside
+    popup.addEventListener('click', (e) => {
+      if (e.target === popup) {
+        popup.classList.add('hidden');
+      }
+    });
   </script>
 
   
